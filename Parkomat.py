@@ -7,7 +7,7 @@ def dodajMonete1gr(wartosc):
 
 #Funkcja odpowiadająca za aktualizacje czasu
 def clock():
-    labelAktualnaData.config(text = time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
+    labelAktualnaData.config(text = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
     labelAktualnaData.after(1000, clock)
 
 #Tworzenie instancji okna tkinter
