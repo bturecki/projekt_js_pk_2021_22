@@ -1,21 +1,41 @@
-#Import biblioteki do tworzenia GUI
 from tkinter import *
 from tkinter import messagebox
 import time
 from tkcalendar import Calendar, DateEntry
+from datetime import datetime, timedelta
 
-#Póki co do testów
-def zatwierdz():
+def resetZmienneGlobalne():
+    global sumaWrzuconychMonet
+    sumaWrzuconychMonet = 0
+
     global zmianaAktualnejDaty
-    messagebox.showinfo("Info", zmianaAktualnejDaty)
+    zmianaAktualnejDaty = ''
+
+def zatwierdz():
+    """
+    Funkcja weryfikująca, zatwierdzająca oraz resetująca dane
+    """
+    global sumaWrzuconychMonet
+    if len(entryNumerRejestracyjny.get()) < 1 or len(entryNumerRejestracyjny.get()) > 7:
+            messagebox.showerror("Błąd", "Wpisano niepoprawny numer rejestracyjny pojazdu.")
+    elif sumaWrzuconychMonet == 0:
+            messagebox.showerror("Błąd", "Nie wrzucono żadnych monet.")
+    else:
+        messagebox.showinfo("Info", "Zatwierdzono.")
+        resetZmienneGlobalne()
+        setEntryText(entryLiczbaWrzucanychMonet, "1")
+        setEntryText(entryNumerRejestracyjny, "")
+
 
 
 def zmianaAktualnejGodziny():
-
+    """
+    Funkcja otwierająca okno służące do wyboru niestandardowej daty oraz godziny
+    """
     wybranaData = None
     windowZmianaAktualnejGodziny = Toplevel()
     windowZmianaAktualnejGodziny.title("Zmiana godziny")
-    cal = DateEntry(windowZmianaAktualnejGodziny, background='darkblue', foreground='white', borderwidth=2)
+    cal = DateEntry(windowZmianaAktualnejGodziny,selectmode='day', background='darkblue', foreground='white', borderwidth=2)
     cal.grid(row=0, column=0)
     entryGodzina = Entry(windowZmianaAktualnejGodziny, width = 2)
     entryGodzina.grid(row=0, column=1)
@@ -26,11 +46,17 @@ def zmianaAktualnejGodziny():
     entrySekunda = Entry(windowZmianaAktualnejGodziny, width = 2)
     entrySekunda.grid(row=0, column=5)
 
-    #TODO do dokończenia zwracanie pełnej daty
     def zmianaAktualnejGodzinyClose():
-        nonlocal wybranaData
-        wybranaData = entryGodzina.get()
-        windowZmianaAktualnejGodziny.destroy()
+        _godziny = int(entryGodzina.get()) if entryGodzina.get().isdigit() else None
+        _minuty = int(entryMinuta.get()) if entryMinuta.get().isdigit() else None
+        _sekundy = int(entrySekunda.get()) if entrySekunda.get().isdigit() else None
+        if(_godziny is None or _godziny < 0 or _godziny > 23 or _minuty is None or _minuty < 0 or _minuty > 60 or _sekundy is None or _sekundy < 0 or _sekundy > 60):
+            messagebox.showerror("Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
+        else:
+            _data = (datetime.strptime(cal.get_date().strftime('%d.%m.%y'), '%d.%m.%y') + timedelta(hours=_godziny, minutes=_minuty, seconds= _sekundy)).strftime('%d.%m.%y %H:%M:%S')
+            nonlocal wybranaData
+            wybranaData = _data
+            windowZmianaAktualnejGodziny.destroy()
 
     buttonOk = Button(windowZmianaAktualnejGodziny, text = "OK", width=2, command= zmianaAktualnejGodzinyClose)
     buttonOk.grid(row=0, column=6)
@@ -45,6 +71,9 @@ def zmianaAktualnejGodziny():
 
 
 def setEntryText(cntrl, text):
+    """
+    Pomocnik do ustawiania tekstu w kontrolkach typu Entry
+    """
     cntrl.delete(0, END)
     cntrl.insert(0,text)
 
@@ -61,15 +90,21 @@ def dodajMonete(wartosc):
         messagebox.showinfo("Info", "Aktualnie wrzucono: " + str(sumaWrzuconychMonet))
     setEntryText(entryLiczbaWrzucanychMonet, "1")
 
-def clock():
+def setAktualnyCzas():
     """
     Funkcja odpowiadająca za aktualizacje czasu
     """
-    labelAktualnaData.config(text = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
-    labelAktualnaData.after(1000, clock)
+    global zmianaAktualnejDaty
+    if zmianaAktualnejDaty != '':
+        labelAktualnaData.config(text = zmianaAktualnejDaty)
+    else:
+        labelAktualnaData.config(text = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
+    labelAktualnaData.after(1000, setAktualnyCzas)
 
 #Tworzenie instancji okna tkinter
 mainWindow = Tk()
+
+resetZmienneGlobalne()
 
 #Ustawienia okna
 mainWindow.title("Parkomat")
@@ -129,15 +164,10 @@ buttonZatwierdz.grid(row=13, column=0, columnspan = 2)
 
 #Zmiana aktualnej godziny
 Label(mainWindow, text=" ").grid(row=12)
-buttonZatwierdz = Button(mainWindow, text = "Zmiana aktualnej godziny", width=40, command=zmianaAktualnejGodziny)
-buttonZatwierdz.grid(row=14, column=0, columnspan = 2)
+buttonZmianaAktualnejGodziny = Button(mainWindow, text = "Zmiana aktualnej godziny", width=40, command=zmianaAktualnejGodziny)
+buttonZmianaAktualnejGodziny.grid(row=14, column=0, columnspan=2)
 
-clock()
-global sumaWrzuconychMonet
-sumaWrzuconychMonet = 0
-
-global zmianaAktualnejDaty
-zmianaAktualnejDaty = ''
+setAktualnyCzas()
 
 #Pętla odpowiadająca za działanie głównego okna
 mainWindow.mainloop()
