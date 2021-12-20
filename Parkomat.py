@@ -4,8 +4,16 @@ from tkinter import messagebox
 import time
 from tkcalendar import Calendar, DateEntry
 
+#Póki co do testów
+def zatwierdz():
+    global zmianaAktualnejDaty
+    messagebox.showinfo("Info", zmianaAktualnejDaty)
+
+
 def zmianaAktualnejGodziny():
-    windowZmianaAktualnejGodziny = Toplevel(mainWindow)
+
+    wybranaData = None
+    windowZmianaAktualnejGodziny = Toplevel()
     windowZmianaAktualnejGodziny.title("Zmiana godziny")
     cal = DateEntry(windowZmianaAktualnejGodziny, background='darkblue', foreground='white', borderwidth=2)
     cal.grid(row=0, column=0)
@@ -17,10 +25,24 @@ def zmianaAktualnejGodziny():
     Label(windowZmianaAktualnejGodziny, text=":", width=0).grid(row=0, column=4)
     entrySekunda = Entry(windowZmianaAktualnejGodziny, width = 2)
     entrySekunda.grid(row=0, column=5)
-    buttonOk = Button(windowZmianaAktualnejGodziny, text = "OK", width=2).grid(row=0, column=6)
+
+    #TODO do dokończenia zwracanie pełnej daty
+    def zmianaAktualnejGodzinyClose():
+        nonlocal wybranaData
+        wybranaData = entryGodzina.get()
+        windowZmianaAktualnejGodziny.destroy()
+
+    buttonOk = Button(windowZmianaAktualnejGodziny, text = "OK", width=2, command= zmianaAktualnejGodzinyClose)
+    buttonOk.grid(row=0, column=6)
     setEntryText(entryGodzina, "00")
     setEntryText(entryMinuta, "00")
     setEntryText(entrySekunda, "00")
+
+    windowZmianaAktualnejGodziny.wait_window(windowZmianaAktualnejGodziny)
+    
+    global zmianaAktualnejDaty
+    zmianaAktualnejDaty = wybranaData
+
 
 def setEntryText(cntrl, text):
     cntrl.delete(0, END)
@@ -102,7 +124,7 @@ setEntryText(entryLiczbaWrzucanychMonet, "1")
 
 #Przycisk zatwierdź
 Label(mainWindow, text=" ").grid(row=12)
-buttonZatwierdz = Button(mainWindow, text = "Zatwierdź", width=40)
+buttonZatwierdz = Button(mainWindow, text = "Zatwierdź", width=40, command=zatwierdz)
 buttonZatwierdz.grid(row=13, column=0, columnspan = 2)
 
 #Zmiana aktualnej godziny
@@ -113,6 +135,9 @@ buttonZatwierdz.grid(row=14, column=0, columnspan = 2)
 clock()
 global sumaWrzuconychMonet
 sumaWrzuconychMonet = 0
+
+global zmianaAktualnejDaty
+zmianaAktualnejDaty = ''
 
 #Pętla odpowiadająca za działanie głównego okna
 mainWindow.mainloop()
