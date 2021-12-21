@@ -11,11 +11,19 @@ def resetZmienneGlobalne():
     global zmianaAktualnejDaty
     zmianaAktualnejDaty = ''
 
-#TODO
+def getAktualnaData():
+    return datetime.strptime(labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
+
+def setDataWyjazdu(val):
+    labelDataWyjazduZParkingu.config(text = val.strftime('%d.%m.%Y %H:%M:%S'))
+
 def aktualizacjaCzasu():
     """
     Funkcja aktualizujaca czas wyjazdu
     """
+    global sumaWrzuconychMonet
+    if  sumaWrzuconychMonet > 0:
+        setDataWyjazdu(getAktualnaData())
 
 def setlLabelWrzucono():
     global sumaWrzuconychMonet
@@ -63,7 +71,7 @@ def zmianaAktualnejGodziny():
         if(_godziny is None or _godziny < 0 or _godziny > 23 or _minuty is None or _minuty < 0 or _minuty > 60 or _sekundy is None or _sekundy < 0 or _sekundy > 60):
             messagebox.showerror("Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
         else:
-            _data = (datetime.strptime(cal.get_date().strftime('%d.%m.%y'), '%d.%m.%y') + timedelta(hours=_godziny, minutes=_minuty, seconds= _sekundy)).strftime('%d.%m.%y %H:%M:%S')
+            _data = (datetime.strptime(cal.get_date().strftime('%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds= _sekundy)).strftime('%d.%m.%Y %H:%M:%S')
             nonlocal wybranaData
             wybranaData = _data
             windowZmianaAktualnejGodziny.destroy()
@@ -98,6 +106,7 @@ def dodajMonete(wartosc):
         global sumaWrzuconychMonet
         sumaWrzuconychMonet = sumaWrzuconychMonet + _liczbaWrzucanychMonet * wartosc
         setlLabelWrzucono()
+        aktualizacjaCzasu()
     setEntryText(entryLiczbaWrzucanychMonet, "1")
 
 
