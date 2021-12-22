@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import time
 from tkcalendar import DateEntry
 from datetime import datetime, timedelta
@@ -22,7 +23,9 @@ def aktualizacjaCzasu():
     """
     global sumaWrzuconychMonet
     if  sumaWrzuconychMonet > 0:
-        setDataWyjazdu(getAktualnaData())
+        setDataWyjazdu(getAktualnaData() + timedelta(hours=5)) #TODO do dokończenia obliczanie daty wyjazdu
+    else:
+        labelDataWyjazduZParkingu.config(text = "---------------------")
 
 def setlLabelWrzucono():
     global sumaWrzuconychMonet
@@ -35,11 +38,11 @@ def zatwierdz():
     """
     global sumaWrzuconychMonet
     if len(entryNumerRejestracyjny.get()) < 1 or len(entryNumerRejestracyjny.get()) > 7:
-            tk.messagebox.showerror("Błąd", "Wpisano niepoprawny numer rejestracyjny pojazdu.")
+            messagebox.showerror("Błąd", "Wpisano niepoprawny numer rejestracyjny pojazdu.")
     elif sumaWrzuconychMonet == 0:
-            tk.messagebox.showerror("Błąd", "Nie wrzucono żadnych monet.")
+            messagebox.showerror("Błąd", "Nie wrzucono żadnych monet.")
     else:
-        tk.messagebox.showinfo("Info", "Zatwierdzono.")
+        messagebox.showinfo("Info", "Zatwierdzono.")
         resetZmienneGlobalne()
         setEntryText(entryLiczbaWrzucanychMonet, "1")
         setEntryText(entryNumerRejestracyjny, "")
@@ -68,7 +71,7 @@ def zmianaAktualnejGodziny():
         _minuty = int(entryMinuta.get()) if entryMinuta.get().isdigit() else None
         _sekundy = int(entrySekunda.get()) if entrySekunda.get().isdigit() else None
         if(_godziny is None or _godziny < 0 or _godziny > 23 or _minuty is None or _minuty < 0 or _minuty > 60 or _sekundy is None or _sekundy < 0 or _sekundy > 60):
-            tk.messagebox.showerror("Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
+            messagebox.showerror("Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
         else:
             _data = (datetime.strptime(cal.get_date().strftime('%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds= _sekundy)).strftime('%d.%m.%Y %H:%M:%S')
             nonlocal wybranaData
@@ -100,7 +103,7 @@ def dodajMonete(wartosc):
     """
     _liczbaWrzucanychMonet = int(entryLiczbaWrzucanychMonet.get()) if entryLiczbaWrzucanychMonet.get().isdigit() else None
     if _liczbaWrzucanychMonet is None or _liczbaWrzucanychMonet < 1:
-        tk.messagebox.showerror("Błąd", "Liczba wrzucanych monet musi być liczbą naturalną dodatnią.")
+        messagebox.showerror("Błąd", "Liczba wrzucanych monet musi być liczbą naturalną dodatnią.")
     else:
         global sumaWrzuconychMonet
         sumaWrzuconychMonet = sumaWrzuconychMonet + _liczbaWrzucanychMonet * wartosc
@@ -118,6 +121,8 @@ def setAktualnyCzas():
         labelAktualnaData.config(text = zmianaAktualnejDaty)
     else:
         labelAktualnaData.config(text = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
+    
+    aktualizacjaCzasu()
     labelAktualnaData.after(1000, setAktualnyCzas)
 
 #Tworzenie instancji okna tkinter
@@ -127,7 +132,7 @@ resetZmienneGlobalne()
 
 #Ustawienia okna
 mainWindow.title("Parkomat")
-mainWindow.geometry("301x360")
+mainWindow.geometry("301x380")
 mainWindow.eval('tk::PlaceWindow . center')
 
 #Pole tekstowe na numer rejestracyjny pojazdu
@@ -150,7 +155,7 @@ labelDataWyjazduZParkingu = tk.Label(mainWindow, width=20)
 labelDataWyjazduZParkingu.grid(row=3, column=1)
 labelDataWyjazduZParkingu.config(text = "---------------------")
 #Przyciski z monetami
-tk.Label(mainWindow, text=" ").grid(row=3)
+tk.Label(mainWindow, text=" ").grid(row=4)
 button1gr = tk.Button(mainWindow, text = "1gr", width=20, command= lambda: dodajMonete(0.01))
 button1gr.grid(row=5, column=0)
 button2gr = tk.Button(mainWindow, text = "2gr", width=20, command= lambda: dodajMonete(0.02))
@@ -177,7 +182,7 @@ button50zl = tk.Button(mainWindow, text = "50zł", width=20, command= lambda: do
 button50zl.grid(row=10, column=1)
 #Pole pozwalające wpisać liczbę wrzucanych monet
 tk.Label(mainWindow, text=" ").grid(row=11)
-tk.Label(mainWindow, text="Liczba wrzucanych monet : ", width=20).grid(row=12, column=0)
+tk.Label(mainWindow, text="Liczba wrzucanych monet: ", width=20).grid(row=12, column=0)
 entryLiczbaWrzucanychMonet = tk.Entry(mainWindow, width=20)
 entryLiczbaWrzucanychMonet.grid(row=12, column=1)
 setEntryText(entryLiczbaWrzucanychMonet, "1")
