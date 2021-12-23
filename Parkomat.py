@@ -3,11 +3,10 @@ from tkinter import messagebox
 import time
 from tkcalendar import DateEntry
 from datetime import datetime, timedelta
+from Models.Pieniadze import *
 
-def resetZmienneGlobalne():
-    global sumaWrzuconychMonet
-    sumaWrzuconychMonet = 0
-
+def resetData():
+    przechowywaczPieniedzy.Reset()
     global zmianaAktualnejDaty
     zmianaAktualnejDaty = ''
 
@@ -21,29 +20,26 @@ def aktualizacjaCzasu():
     """
     Funkcja aktualizujaca czas wyjazdu
     """
-    global sumaWrzuconychMonet
-    if  sumaWrzuconychMonet > 0:
+    if  przechowywaczPieniedzy.Suma() > 0:
         setDataWyjazdu(getAktualnaData() + timedelta(hours=5)) #TODO do dokończenia obliczanie daty wyjazdu
     else:
         labelDataWyjazduZParkingu.config(text = "---------------------")
 
 def setlLabelWrzucono():
-    global sumaWrzuconychMonet
-    labelWrzucono.config(text=str(sumaWrzuconychMonet)+" zł")
+    labelWrzucono.config(text=str(przechowywaczPieniedzy.Suma())+" zł")
 
 
 def zatwierdz():
     """
     Funkcja weryfikująca, zatwierdzająca oraz resetująca dane
     """
-    global sumaWrzuconychMonet
     if len(entryNumerRejestracyjny.get()) < 1 or len(entryNumerRejestracyjny.get()) > 7:
             messagebox.showerror("Błąd", "Wpisano niepoprawny numer rejestracyjny pojazdu.")
-    elif sumaWrzuconychMonet == 0:
+    elif przechowywaczPieniedzy.Suma() == 0:
             messagebox.showerror("Błąd", "Nie wrzucono żadnych monet.")
     else:
         messagebox.showinfo("Info", "Zatwierdzono.")
-        resetZmienneGlobalne()
+        resetData()
         setEntryText(entryLiczbaWrzucanychMonet, "1")
         setEntryText(entryNumerRejestracyjny, "")
         setlLabelWrzucono()
@@ -97,7 +93,7 @@ def setEntryText(cntrl, text):
     cntrl.delete(0, tk.END)
     cntrl.insert(0,text)
 
-def dodajMonete(wartosc):
+def dodajMonete(wartosc, waluta = 'PLN'):
     """
     Funkcja do dodania wartości wybranej momnety do sumy
     """
@@ -105,8 +101,8 @@ def dodajMonete(wartosc):
     if _liczbaWrzucanychMonet is None or _liczbaWrzucanychMonet < 1:
         messagebox.showerror("Błąd", "Liczba wrzucanych monet musi być liczbą naturalną dodatnią.")
     else:
-        global sumaWrzuconychMonet
-        sumaWrzuconychMonet = sumaWrzuconychMonet + _liczbaWrzucanychMonet * wartosc
+        for x in range(_liczbaWrzucanychMonet):
+            przechowywaczPieniedzy.DodajPieniadze(Moneta(wartosc, waluta) if wartosc < 10 else Banknot(wartosc, waluta))
         setlLabelWrzucono()
         aktualizacjaCzasu()
     setEntryText(entryLiczbaWrzucanychMonet, "1")
@@ -128,7 +124,8 @@ def setAktualnyCzas():
 #Tworzenie instancji okna tkinter
 mainWindow = tk.Tk()
 
-resetZmienneGlobalne()
+przechowywaczPieniedzy = PrzechowywaczPieniedzy()
+resetData()
 
 #Ustawienia okna
 mainWindow.title("Parkomat")
