@@ -1,10 +1,12 @@
+from Models.ParkomatExceptions import *
+
 class Pieniadz:
     
     def __init__(self,wartosc, waluta):
         if isinstance(wartosc, float) == False and isinstance(wartosc, int) == False:
-            raise NotImplementedError(type(wartosc)) #TODO dodać własne exception
+            raise ValueError("Wartosc musi byc typu liczbowego.")
         if isinstance(waluta, str) == False:
-            raise NotImplementedError('#2') #TODO dodać własne exception
+            raise ValueError("Waluta musi byc typu słownego.")
         self.__wartosc = wartosc
         self.__waluta = waluta
             
@@ -17,18 +19,18 @@ class Pieniadz:
 class Moneta(Pieniadz):
     def __init__(self, wartosc, waluta):
         if wartosc not in [0.01,0.02,0.05,0.1,0.2,0.5,1,2,5]:
-            raise NotImplementedError('#3') #TODO dodać własne exception
+            raise ZlyNominalExcepion(wartosc)
         elif waluta.upper() != 'PLN':
-            raise NotImplementedError('#4') #TODO dodać własne exception
+            raise NieznanaWalutaException(waluta)
         else:
             super().__init__(wartosc, waluta)
 
 class Banknot(Pieniadz):
     def __init__(self, wartosc, waluta):
         if wartosc not in [10,20,50,100,500]:
-            raise NotImplementedError('#5') #TODO dodać własne exception
+            raise ZlyNominalExcepion(wartosc)
         elif waluta.upper() != 'PLN':
-            raise NotImplementedError('#6') #TODO dodać własne exception
+            raise NieznanaWalutaException(waluta)
         else:
             super().__init__(wartosc, waluta)
 
@@ -41,9 +43,9 @@ class PrzechowywaczPieniedzy:
             if pieniadz.GetWaluta() == self.__waluta:
                 self.__lista.append(pieniadz)
             else:
-                raise NotImplementedError('Nieznana waluta') #TODO dodać własne exception
+                raise NieznanaWalutaException(pieniadz.GetWaluta())
         else:
-            raise NotImplementedError('Przesłany obiekt nie pieniądzem') #TODO dodać własne exception
+            raise ValueError("Przesyłany pieniadz musi byc typu Pieniadz.")
 
      def Suma(self):
         s = 0
