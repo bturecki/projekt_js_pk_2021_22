@@ -40,6 +40,9 @@ class PrzechowywaczPieniedzy:
 
      def DodajPieniadze(self, pieniadz):
         if isinstance(pieniadz, Pieniadz):
+            if isinstance(pieniadz, Moneta):
+                if len([p for p in self.__lista if p.GetWartosc() == pieniadz.GetWartosc()]) == 200:
+                    return "Automat przepełniony monetami o wartości " + str(pieniadz.GetWartosc()) + " " + pieniadz.GetWaluta() + "! Wrzuć inny nominał."
             if pieniadz.GetWaluta() == self.__waluta:
                 self.__lista.append(pieniadz)
             else:

@@ -3,46 +3,65 @@ from tkinter import messagebox
 import time
 from tkcalendar import DateEntry
 from datetime import datetime, timedelta
+from dateutil.rrule import *  
 from Models.Pieniadze import *
+import re
+import math
 
 def resetData():
+    """
+    Resetuje wszystkie dane parkometru (np. po opłaceniu resetuje się aby kolejna osoba mogła opłacić swój parking)
+    """
     przechowywaczPieniedzy.Reset()
     global zmianaAktualnejDaty
     zmianaAktualnejDaty = ''
 
-def getAktualnaData():
-    return datetime.strptime(labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
+def pobierzDateSekundy(start, x):
+    """
+    Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
+    która jest aktualnie opłacona jeśli chodzi o parkowanie
+    """
+    rr = rrule(SECONDLY, byweekday=(MO, TU, WE, TH, FR), byhour=(8,9,10,11,12,13,14,15,16,17,18,19), dtstart=start, interval=x)
+    return rr.after(start)
 
-def setDataWyjazdu(val):
-    labelDataWyjazduZParkingu.config(text = val.strftime('%d.%m.%Y %H:%M:%S'))
+def getSekundyDlaDodanychPieniedzy(suma: int) -> int: #TODO do dokończenia obliczanie daty wyjazdu
+    hours = (suma >= 2) * 1 + (suma >= 6) * 1 +max(0, math.floor((suma - 6) / 5))
+    return hours * 60 * 60
+
+def getAktualnaData() -> datetime:
+    return datetime.strptime(labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
 
 def aktualizacjaCzasu():
     """
     Funkcja aktualizujaca czas wyjazdu
     """
     if  przechowywaczPieniedzy.Suma() > 0:
-        setDataWyjazdu(getAktualnaData() + timedelta(hours=5)) #TODO do dokończenia obliczanie daty wyjazdu
+        setlLabelText(labelDataWyjazduZParkingu,pobierzDateSekundy(getAktualnaData(), getSekundyDlaDodanychPieniedzy(przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
     else:
         labelDataWyjazduZParkingu.config(text = "---------------------")
 
-def setlLabelWrzucono():
-    labelWrzucono.config(text=str(przechowywaczPieniedzy.Suma())+" zł")
-
+def setlLabelText(cntrl, text):
+    """
+    Pomocnik do ustawiania tekstu w kontrolkach typu Label
+    """
+    cntrl.config(text=text)
 
 def zatwierdz():
     """
     Funkcja weryfikująca, zatwierdzająca oraz resetująca dane
     """
-    if len(entryNumerRejestracyjny.get()) < 1 or len(entryNumerRejestracyjny.get()) > 7:
-            messagebox.showerror("Błąd", "Wpisano niepoprawny numer rejestracyjny pojazdu.")
+    if entryNumerRejestracyjny.get() is None or entryNumerRejestracyjny.get() == "":
+            messagebox.showerror("Błąd", "Nie wpisano numeru rejestracyjnego pojazdu.")
+    elif bool(re.match('^[A-Z0-9]*$', entryNumerRejestracyjny.get())) == False:
+            messagebox.showerror("Błąd", "Numer rejestracyjny może składać się tylko z wielkich liter od A do Z i cyfr.")
     elif przechowywaczPieniedzy.Suma() == 0:
-            messagebox.showerror("Błąd", "Nie wrzucono żadnych monet.")
+            messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
     else:
-        messagebox.showinfo("Info", "Zatwierdzono.")
+        messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + entryNumerRejestracyjny.get() + ", czas zakupu: " + labelAktualnaData.cget("text") + ", termin wyjazdu: " + labelDataWyjazduZParkingu.cget("text"))
         resetData()
-        setEntryText(entryLiczbaWrzucanychMonet, "1")
+        setEntryText(entryLiczbaWrzucanychPieniedzy, "1")
         setEntryText(entryNumerRejestracyjny, "")
-        setlLabelWrzucono()
+        setlLabelText(labelWrzucono,str(przechowywaczPieniedzy.Suma())+" zł")
 
 def zmianaAktualnejGodziny():
     """
@@ -93,19 +112,22 @@ def setEntryText(cntrl, text):
     cntrl.delete(0, tk.END)
     cntrl.insert(0,text)
 
-def dodajMonete(wartosc, waluta = 'PLN'):
+def dodajPieniadze(wartosc, waluta = 'PLN'):
     """
     Funkcja do dodania wartości wybranej momnety do sumy
     """
-    _liczbaWrzucanychMonet = int(entryLiczbaWrzucanychMonet.get()) if entryLiczbaWrzucanychMonet.get().isdigit() else None
-    if _liczbaWrzucanychMonet is None or _liczbaWrzucanychMonet < 1:
-        messagebox.showerror("Błąd", "Liczba wrzucanych monet musi być liczbą naturalną dodatnią.")
+    _liczbaWrzucanychPieniedzy = int(entryLiczbaWrzucanychPieniedzy.get()) if entryLiczbaWrzucanychPieniedzy.get().isdigit() else None
+    if _liczbaWrzucanychPieniedzy is None or _liczbaWrzucanychPieniedzy < 1:
+        messagebox.showerror("Błąd", "Liczba wrzucanych pieniędzy musi być liczbą naturalną dodatnią.")
     else:
-        for x in range(_liczbaWrzucanychMonet):
-            przechowywaczPieniedzy.DodajPieniadze(Moneta(wartosc, waluta) if wartosc < 10 else Banknot(wartosc, waluta))
-        setlLabelWrzucono()
+        for x in range(_liczbaWrzucanychPieniedzy):
+            result = przechowywaczPieniedzy.DodajPieniadze(Moneta(wartosc, waluta) if wartosc < 10 else Banknot(wartosc, waluta))
+            if result != None:
+                messagebox.showerror("Błąd", result)
+                break
+        setlLabelText(labelWrzucono,str(przechowywaczPieniedzy.Suma())+" zł")
         aktualizacjaCzasu()
-    setEntryText(entryLiczbaWrzucanychMonet, "1")
+    setEntryText(entryLiczbaWrzucanychPieniedzy, "1")
 
 
 def setAktualnyCzas():
@@ -151,38 +173,38 @@ tk.Label(mainWindow, text="Data wyjazdu z parkingu : ", width=20).grid(row=3, co
 labelDataWyjazduZParkingu = tk.Label(mainWindow, width=20)
 labelDataWyjazduZParkingu.grid(row=3, column=1)
 labelDataWyjazduZParkingu.config(text = "---------------------")
-#Przyciski z monetami
+#Przyciski z pieniędzmi
 tk.Label(mainWindow, text=" ").grid(row=4)
-button1gr = tk.Button(mainWindow, text = "1gr", width=20, command= lambda: dodajMonete(0.01))
+button1gr = tk.Button(mainWindow, text = "1gr", width=20, command= lambda: dodajPieniadze(0.01))
 button1gr.grid(row=5, column=0)
-button2gr = tk.Button(mainWindow, text = "2gr", width=20, command= lambda: dodajMonete(0.02))
+button2gr = tk.Button(mainWindow, text = "2gr", width=20, command= lambda: dodajPieniadze(0.02))
 button2gr.grid(row=6, column=0)
-button5gr = tk.Button(mainWindow, text = "5gr", width=20, command= lambda: dodajMonete(0.05))
+button5gr = tk.Button(mainWindow, text = "5gr", width=20, command= lambda: dodajPieniadze(0.05))
 button5gr.grid(row=7, column=0)
-button10gr = tk.Button(mainWindow, text = "10gr", width=20, command= lambda: dodajMonete(0.10))
+button10gr = tk.Button(mainWindow, text = "10gr", width=20, command= lambda: dodajPieniadze(0.10))
 button10gr.grid(row=8, column=0)
-button20gr = tk.Button(mainWindow, text = "20gr", width=20, command= lambda: dodajMonete(0.20))
+button20gr = tk.Button(mainWindow, text = "20gr", width=20, command= lambda: dodajPieniadze(0.20))
 button20gr.grid(row=9, column=0)
-button50gr = tk.Button(mainWindow, text = "50gr", width=20, command= lambda: dodajMonete(0.50))
+button50gr = tk.Button(mainWindow, text = "50gr", width=20, command= lambda: dodajPieniadze(0.50))
 button50gr.grid(row=10, column=0)
-button1zl = tk.Button(mainWindow, text = "1zł", width=20, command= lambda: dodajMonete(1))
+button1zl = tk.Button(mainWindow, text = "1zł", width=20, command= lambda: dodajPieniadze(1))
 button1zl.grid(row=5, column=1)
-button2zl = tk.Button(mainWindow, text = "2zł", width=20, command= lambda: dodajMonete(2))
+button2zl = tk.Button(mainWindow, text = "2zł", width=20, command= lambda: dodajPieniadze(2))
 button2zl.grid(row=6, column=1)
-button5zl = tk.Button(mainWindow, text = "5zł", width=20, command= lambda: dodajMonete(5))
+button5zl = tk.Button(mainWindow, text = "5zł", width=20, command= lambda: dodajPieniadze(5))
 button5zl.grid(row=7, column=1)
-button10zl = tk.Button(mainWindow, text = "10zł", width=20, command= lambda: dodajMonete(10))
+button10zl = tk.Button(mainWindow, text = "10zł", width=20, command= lambda: dodajPieniadze(10))
 button10zl.grid(row=8, column=1)
-button20zl = tk.Button(mainWindow, text = "20zł", width=20, command= lambda: dodajMonete(20))
+button20zl = tk.Button(mainWindow, text = "20zł", width=20, command= lambda: dodajPieniadze(20))
 button20zl.grid(row=9, column=1)
-button50zl = tk.Button(mainWindow, text = "50zł", width=20, command= lambda: dodajMonete(50))
+button50zl = tk.Button(mainWindow, text = "50zł", width=20, command= lambda: dodajPieniadze(50))
 button50zl.grid(row=10, column=1)
-#Pole pozwalające wpisać liczbę wrzucanych monet
+#Pole pozwalające wpisać liczbę wrzucanych pieniędzy
 tk.Label(mainWindow, text=" ").grid(row=11)
-tk.Label(mainWindow, text="Liczba wrzucanych monet: ", width=20).grid(row=12, column=0)
-entryLiczbaWrzucanychMonet = tk.Entry(mainWindow, width=20)
-entryLiczbaWrzucanychMonet.grid(row=12, column=1)
-setEntryText(entryLiczbaWrzucanychMonet, "1")
+tk.Label(mainWindow, text="Liczba wrzucanych: ", width=20).grid(row=12, column=0)
+entryLiczbaWrzucanychPieniedzy = tk.Entry(mainWindow, width=20)
+entryLiczbaWrzucanychPieniedzy.grid(row=12, column=1)
+setEntryText(entryLiczbaWrzucanychPieniedzy, "1")
 
 #Przycisk zatwierdź
 tk.Label(mainWindow, text=" ").grid(row=13)
@@ -195,7 +217,7 @@ buttonZmianaAktualnejGodziny = tk.Button(mainWindow, text = "Zmiana aktualnej go
 buttonZmianaAktualnejGodziny.grid(row=15, column=0, columnspan=2)
 
 setAktualnyCzas()
-setlLabelWrzucono()
+setlLabelText(labelWrzucono,str(przechowywaczPieniedzy.Suma())+" zł")
 
 #Pętla odpowiadająca za działanie głównego okna
 mainWindow.mainloop()
