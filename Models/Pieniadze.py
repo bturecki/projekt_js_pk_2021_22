@@ -53,8 +53,8 @@ class PrzechowywaczPieniedzy:
      def Suma(self):
         s = 0
         for x in self.__lista:
-            s = s + x.GetWartosc()
-        return s
+            s = s + round(x.GetWartosc(),2)
+        return round(s,2)
 
      def Reset(self):
          self.__lista = []

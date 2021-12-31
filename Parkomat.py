@@ -42,7 +42,7 @@ def aktualizacjaCzasu():
     """
     Funkcja aktualizujaca czas wyjazdu
     """
-    if  przechowywaczPieniedzy.Suma() > 0:
+    if  przechowywaczPieniedzy.Suma() >= 2: #FIXME poprawić tę wartość 2
         setlLabelText(labelDataWyjazduZParkingu,pobierzDateSekundy(getAktualnaData(), getSekundyDlaDodanychPieniedzy(przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
     else:
         labelDataWyjazduZParkingu.config(text = "---------------------")
