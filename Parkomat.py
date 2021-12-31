@@ -25,10 +25,17 @@ def pobierzDateSekundy(start, x):
     return rr.after(start)
 
 def getSekundyDlaDodanychPieniedzy(suma: int) -> int: #TODO do dokończenia obliczanie daty wyjazdu
+    """
+    Funkcja zwracająca czas wyrażony w sekundach, na który pozwala aktalnie
+    wrzucona wartość pieniędzy
+    """
     hours = (suma >= 2) * 1 + (suma >= 6) * 1 +max(0, math.floor((suma - 6) / 5))
     return hours * 60 * 60
 
 def getAktualnaData() -> datetime:
+    """
+    Funkcja zwracająca aktualnie wybraną date jako obiekt typu datetime
+    """
     return datetime.strptime(labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
 
 def aktualizacjaCzasu():
@@ -128,8 +135,6 @@ def dodajPieniadze(wartosc, waluta = 'PLN'):
         setlLabelText(labelWrzucono,str(przechowywaczPieniedzy.Suma())+" zł")
         aktualizacjaCzasu()
     setEntryText(entryLiczbaWrzucanychPieniedzy, "1")
-
-
 def setAktualnyCzas():
     """
     Funkcja odpowiadająca za aktualizacje czasu
