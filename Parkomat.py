@@ -21,6 +21,8 @@ def pobierzDateSekundy(start, x):
     Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
     która jest aktualnie opłacona jeśli chodzi o parkowanie
     """
+    if x == 0:
+        return start
     rr = rrule(SECONDLY, byweekday=(MO, TU, WE, TH, FR), byhour=(8,9,10,11,12,13,14,15,16,17,18,19), dtstart=start, interval=x)
     return rr.after(start)
 
@@ -29,7 +31,7 @@ def getSekundyDlaDodanychPieniedzy(suma: int) -> int: #TODO do dokończenia obli
     Funkcja zwracająca czas wyrażony w sekundach, na który pozwala aktalnie
     wrzucona wartość pieniędzy
     """
-    hours = (suma >= 2) * 1 + (suma >= 6) * 1 +max(0, math.floor((suma - 6) / 5))
+    hours = (suma >= 2) * 1 + (suma >= 6) * 1 + max(0, math.floor((suma - 6) / 5))
     return hours * 60 * 60
 
 def getAktualnaData() -> datetime:
@@ -42,7 +44,7 @@ def aktualizacjaCzasu():
     """
     Funkcja aktualizujaca czas wyjazdu
     """
-    if  przechowywaczPieniedzy.Suma() >= 2: #FIXME poprawić tę wartość 2
+    if  przechowywaczPieniedzy.Suma() >= 1:
         setlLabelText(labelDataWyjazduZParkingu,pobierzDateSekundy(getAktualnaData(), getSekundyDlaDodanychPieniedzy(przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
     else:
         labelDataWyjazduZParkingu.config(text = "---------------------")
