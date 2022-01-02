@@ -79,6 +79,7 @@ def zmianaAktualnejGodziny():
     wybranaData = None
     windowZmianaAktualnejGodziny = tk.Toplevel()
     windowZmianaAktualnejGodziny.title("Zmiana godziny")
+    windowZmianaAktualnejGodziny.wm_iconbitmap('IkonaParkomat.ico')
     cal = DateEntry(windowZmianaAktualnejGodziny,selectmode='day', background='darkblue', foreground='white', borderwidth=2)
     cal.grid(row=0, column=0)
     entryGodzina = tk.Entry(windowZmianaAktualnejGodziny, width = 2)
@@ -159,6 +160,7 @@ resetData()
 #Ustawienia okna
 mainWindow.title("Parkomat")
 mainWindow.geometry("301x380")
+mainWindow.wm_iconbitmap('IkonaParkomat.ico')
 mainWindow.eval('tk::PlaceWindow . center')
 
 #Pole tekstowe na numer rejestracyjny pojazdu
