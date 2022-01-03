@@ -1,4 +1,4 @@
-from Models.ParkomatExceptions import *
+from Model.ParkomatExceptions import *
 
 class Pieniadz:
     
