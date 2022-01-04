@@ -1,5 +1,5 @@
 from Controller.ParkomatController import Controller
 
 if __name__ == '__main__':
-    c = Controller()
-    c.run()
+    parkomatApp = Controller()
+    parkomatApp.run()
