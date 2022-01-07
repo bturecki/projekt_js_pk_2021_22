@@ -120,6 +120,8 @@ class Controller():
         Funkcja zwracająca czas wyrażony w sekundach, na który pozwala aktalnie
         wrzucona wartość pieniędzy
         """
+        if suma == 1:
+            return 30 * 60
         t3 = (suma - 6) / 5
         t2 = math.floor(t3)
         t = max(0, t2)
