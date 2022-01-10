@@ -32,7 +32,9 @@ class Controller():
         self.__view.BindButtonZmianaAktualnejGodziny(self.zmianaAktualnejGodziny)
         self.__view.SetLiczbaWrzucanychPieniedzy("1")
         self.__view.SetWrzucono(str(self.__przechowywaczPieniedzy.Suma())+" zł")
+        self.__view.ResetDataWyjazduZParkingu()
         self.setAktualnyCzas()
+
 
     def run(self):
         """
@@ -62,13 +64,12 @@ class Controller():
         Funkcja odpowiadająca za aktualizacje czasu
         """
         if self.__zmianaAktualnejDaty != '':
-            self.__view.GetMainWindow().labelAktualnaData.config(text = self.__zmianaAktualnejDaty)
+            self.__view.SetAktualnaData(self.__zmianaAktualnejDaty)
         else:
-            self.__view.GetMainWindow().labelAktualnaData.config(text = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
+            self.__view.SetAktualnaData(time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
         
         self.aktualizacjaCzasu()
-        self.__view.GetMainWindow().labelAktualnaData.after(1000, self.setAktualnyCzas)
-
+        self.__view.SetAktualnaDataTimerEvent(1000, self.setAktualnyCzas)
 
     def zatwierdz(self,event):
         """
@@ -81,7 +82,7 @@ class Controller():
         elif self.__przechowywaczPieniedzy.Suma() == 0:
                 messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
         else:
-            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.GetNumerRejestracyjny() + ", czas zakupu: " + self.__view.GetMainWindow().labelAktualnaData.cget("text") + ", termin wyjazdu: " + self.__view.GetDataWyjazduZParkingu())
+            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.GetNumerRejestracyjny() + ", czas zakupu: " + self.__view.GetAktualnaData() + ", termin wyjazdu: " + self.__view.GetDataWyjazduZParkingu())
             self.resetData()
             self.__view.SetLiczbaWrzucanychPieniedzy("1")
             self.__view.SetNumerRejestracyjny("")
@@ -116,20 +117,14 @@ class Controller():
         if suma > 6:
             return math.floor(72 * (suma - 6) * 10) + 3600 * 2
 
-    def getAktualnaData(self) -> datetime:
-        """
-        Funkcja zwracająca aktualnie wybraną date jako obiekt typu datetime
-        """
-        return datetime.strptime(self.__view.GetMainWindow().labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
-
     def aktualizacjaCzasu(self):
         """
         Funkcja aktualizujaca czas wyjazdu
         """
         if  self.__przechowywaczPieniedzy.Suma() >= 1:
-            self.__view.SetDataWyjazduZParkingu(self.pobierzDateSekundy(self.getAktualnaData(), self.getSekundyDlaDodanychPieniedzy(self.__przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
+            self.__view.SetDataWyjazduZParkingu(self.pobierzDateSekundy(self.__view.GetAktualnaData(), self.getSekundyDlaDodanychPieniedzy(self.__przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
         else:
-            self.__view.SetDataWyjazduZParkingu("---------------------")
+            self.__view.ResetDataWyjazduZParkingu()
 
     def zmianaAktualnejGodziny(self, event):
         """

@@ -1,4 +1,6 @@
 import tkinter as tk
+import time
+from datetime import datetime, timedelta
 
 class View():
 
@@ -14,8 +16,8 @@ class View():
         self.__mainWindow.__entryNumerRejestracyjny.grid(row=0, column=1)
         #Aktualna data
         self.__mainWindow.__labelAktualnaDataLbl = tk.Label(self.__mainWindow, text="Aktualna data: ", width=20).grid(row=1, column=0)
-        self.__mainWindow.labelAktualnaData = tk.Label(self.__mainWindow, width=20)
-        self.__mainWindow.labelAktualnaData.grid(row=1, column=1)
+        self.__mainWindow.__labelAktualnaData = tk.Label(self.__mainWindow, width=20)
+        self.__mainWindow.__labelAktualnaData.grid(row=1, column=1)
 
         #Suma wrzuconych pieniędzy
         self.__mainWindow.__labelAktualnieWrzucona = tk.Label(self.__mainWindow, text="Aktualnie wrzucona suma: ", width=20).grid(row=2, column=0)
@@ -26,7 +28,6 @@ class View():
         self.__mainWindow.__labelDataWyjazdu = tk.Label(self.__mainWindow, text="Data wyjazdu z parkingu : ", width=20).grid(row=3, column=0)
         self.__mainWindow.__labelDataWyjazduZParkingu = tk.Label(self.__mainWindow, width=20)
         self.__mainWindow.__labelDataWyjazduZParkingu.grid(row=3, column=1)
-        self.__mainWindow.__labelDataWyjazduZParkingu.config(text = "---------------------")
 
         #Przyciski z pieniędzmi
         self.__mainWindow.__empty1 = tk.Label(self.__mainWindow, text=" ").grid(row=4)
@@ -70,9 +71,6 @@ class View():
         self.__mainWindow.__empty4 = tk.Label(self.__mainWindow, text=" ").grid(row=13)
         self.__mainWindow.__buttonZmianaAktualnejGodziny = tk.Button(self.__mainWindow, text = "Zmiana aktualnej daty i godziny", width=40)
         self.__mainWindow.__buttonZmianaAktualnejGodziny.grid(row=15, column=0, columnspan=2)
-    
-    def GetMainWindow(self):
-        return self.__mainWindow
 
     def GetNumerRejestracyjny(self):
         return self.__mainWindow.__entryNumerRejestracyjny.get()
@@ -81,6 +79,15 @@ class View():
         self.__mainWindow.__entryNumerRejestracyjny.delete(0, tk.END)
         self.__mainWindow.__entryNumerRejestracyjny.insert(0,text)
     
+    def GetAktualnaData(self) -> datetime:
+        return datetime.strptime(self.__mainWindow.__labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
+
+    def SetAktualnaData(self, text):
+        self.__mainWindow.__labelAktualnaData.config(text=text)
+
+    def SetAktualnaDataTimerEvent(self, time, event):
+        self.__mainWindow.__labelAktualnaData.after(time, event)
+
     def GetLiczbaWrzucanychPieniedzy(self):
         return self.__mainWindow.__entryLiczbaWrzucanychPieniedzy.get()
 
@@ -96,6 +103,9 @@ class View():
 
     def SetDataWyjazduZParkingu(self, text):
         self.__mainWindow.__labelDataWyjazduZParkingu.config(text=text)
+
+    def ResetDataWyjazduZParkingu(self):
+        self.__mainWindow.__labelDataWyjazduZParkingu.config(text="---------------------")
 
     def BindButtonZatwierdz(self, f):
         self.__mainWindow.__buttonZatwierdz.bind("<Button>", f)
