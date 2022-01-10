@@ -16,18 +16,18 @@ class Controller():
         self.__przechowywaczPieniedzy = PrzechowywaczPieniedzy()
         self.__zmianaAktualnejDaty = ''
         self.__view=View(self.__root)
-        self.__view.GetMainWindow().button1gr.bind("<Button>", lambda event, wartosc=0.01: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button2gr.bind("<Button>", lambda event, wartosc=0.02: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button5gr.bind("<Button>", lambda event, wartosc=0.05: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button10gr.bind("<Button>", lambda event, wartosc=0.10: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button20gr.bind("<Button>", lambda event, wartosc=0.20: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button50gr.bind("<Button>", lambda event, wartosc=0.50: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button1zl.bind("<Button>", lambda event, wartosc=1: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button2zl.bind("<Button>", lambda event, wartosc=2: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button5zl.bind("<Button>", lambda event, wartosc=5: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button10zl.bind("<Button>", lambda event, wartosc=10: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button20zl.bind("<Button>", lambda event, wartosc=20: self.dodajPieniadze(wartosc))
-        self.__view.GetMainWindow().button50zl.bind("<Button>", lambda event, wartosc=50: self.dodajPieniadze(wartosc))
+        self.__view.BindButton1gr(self.dodajPieniadze)
+        self.__view.BindButton2gr(self.dodajPieniadze)
+        self.__view.BindButton5gr(self.dodajPieniadze)
+        self.__view.BindButton10gr(self.dodajPieniadze)
+        self.__view.BindButton20gr(self.dodajPieniadze)
+        self.__view.BindButton50gr(self.dodajPieniadze)
+        self.__view.BindButton1zl(self.dodajPieniadze)
+        self.__view.BindButton2zl(self.dodajPieniadze)
+        self.__view.BindButton5zl(self.dodajPieniadze)
+        self.__view.BindButton10zl(self.dodajPieniadze)
+        self.__view.BindButton20zl(self.dodajPieniadze)
+        self.__view.BindButton50zl(self.dodajPieniadze)
         self.__view.BindButtonZatwierdz(self.zatwierdz)
         self.__view.BindButtonZmianaAktualnejGodziny(self.zmianaAktualnejGodziny)
         self.__view.SetLiczbaWrzucanychPieniedzy("1")
@@ -46,7 +46,7 @@ class Controller():
         """
         liczbaWrzucanychPieniedzy = int(self.__view.GetLiczbaWrzucanychPieniedzy()) if self.__view.GetLiczbaWrzucanychPieniedzy().isdigit() else None
         if liczbaWrzucanychPieniedzy is None or liczbaWrzucanychPieniedzy < 1:
-            messagebox.showerror("Błąd", "Liczba wrzucanych pieniędzy musi być liczbą naturalną dodatnią.")
+            messagebox.showerror("Błąd", "Liczba wrzucanych pieniędzy musi być liczbą dodatnią.")
         else:
             for x in range(liczbaWrzucanychPieniedzy):
                 result = self.__przechowywaczPieniedzy.DodajPieniadze(Moneta(wartosc, waluta) if wartosc < 10 else Banknot(wartosc, waluta))
@@ -110,11 +110,11 @@ class Controller():
         wrzucona wartość pieniędzy
         """
         if suma <= 2:
-            return (18 * suma * 100)
+            return math.floor(18 * suma * 100)
         if suma > 2 and suma <= 6:
-            return (9 * (suma - 2) * 100)+ 3600
+            return math.floor(9 * (suma - 2) * 100)+ 3600
         if suma > 6:
-            return (72 * (suma - 6) * 10) + 3600 * 2
+            return math.floor(72 * (suma - 6) * 10) + 3600 * 2
 
     def getAktualnaData(self) -> datetime:
         """

@@ -30,30 +30,30 @@ class View():
 
         #Przyciski z pieniędzmi
         self.__mainWindow.__empty1 = tk.Label(self.__mainWindow, text=" ").grid(row=4)
-        self.__mainWindow.button1gr = tk.Button(self.__mainWindow, text = "1gr", width=20)
-        self.__mainWindow.button1gr.grid(row=5, column=0)
-        self.__mainWindow.button2gr = tk.Button(self.__mainWindow, text = "2gr", width=20)
-        self.__mainWindow.button2gr.grid(row=6, column=0)
-        self.__mainWindow.button5gr = tk.Button(self.__mainWindow, text = "5gr", width=20)
-        self.__mainWindow.button5gr.grid(row=7, column=0)
-        self.__mainWindow.button10gr = tk.Button(self.__mainWindow, text = "10gr", width=20)
-        self.__mainWindow.button10gr.grid(row=8, column=0)
-        self.__mainWindow.button20gr = tk.Button(self.__mainWindow, text = "20gr", width=20)
-        self.__mainWindow.button20gr.grid(row=9, column=0)
-        self.__mainWindow.button50gr = tk.Button(self.__mainWindow, text = "50gr", width=20)
-        self.__mainWindow.button50gr.grid(row=10, column=0)
-        self.__mainWindow.button1zl = tk.Button(self.__mainWindow, text = "1zł", width=20)
-        self.__mainWindow.button1zl.grid(row=5, column=1)
-        self.__mainWindow.button2zl = tk.Button(self.__mainWindow, text = "2zł", width=20)
-        self.__mainWindow.button2zl.grid(row=6, column=1)
-        self.__mainWindow.button5zl = tk.Button(self.__mainWindow, text = "5zł", width=20)
-        self.__mainWindow.button5zl.grid(row=7, column=1)
-        self.__mainWindow.button10zl = tk.Button(self.__mainWindow, text = "10zł", width=20)
-        self.__mainWindow.button10zl.grid(row=8, column=1)
-        self.__mainWindow.button20zl = tk.Button(self.__mainWindow, text = "20zł", width=20)
-        self.__mainWindow.button20zl.grid(row=9, column=1)
-        self.__mainWindow.button50zl = tk.Button(self.__mainWindow, text = "50zł", width=20)
-        self.__mainWindow.button50zl.grid(row=10, column=1)
+        self.__mainWindow.__button1gr = tk.Button(self.__mainWindow, text = "1gr", width=20)
+        self.__mainWindow.__button1gr.grid(row=5, column=0)
+        self.__mainWindow.__button2gr = tk.Button(self.__mainWindow, text = "2gr", width=20)
+        self.__mainWindow.__button2gr.grid(row=6, column=0)
+        self.__mainWindow.__button5gr = tk.Button(self.__mainWindow, text = "5gr", width=20)
+        self.__mainWindow.__button5gr.grid(row=7, column=0)
+        self.__mainWindow.__button10gr = tk.Button(self.__mainWindow, text = "10gr", width=20)
+        self.__mainWindow.__button10gr.grid(row=8, column=0)
+        self.__mainWindow.__button20gr = tk.Button(self.__mainWindow, text = "20gr", width=20)
+        self.__mainWindow.__button20gr.grid(row=9, column=0)
+        self.__mainWindow.__button50gr = tk.Button(self.__mainWindow, text = "50gr", width=20)
+        self.__mainWindow.__button50gr.grid(row=10, column=0)
+        self.__mainWindow.__button1zl = tk.Button(self.__mainWindow, text = "1zł", width=20)
+        self.__mainWindow.__button1zl.grid(row=5, column=1)
+        self.__mainWindow.__button2zl = tk.Button(self.__mainWindow, text = "2zł", width=20)
+        self.__mainWindow.__button2zl.grid(row=6, column=1)
+        self.__mainWindow.__button5zl = tk.Button(self.__mainWindow, text = "5zł", width=20)
+        self.__mainWindow.__button5zl.grid(row=7, column=1)
+        self.__mainWindow.__button10zl = tk.Button(self.__mainWindow, text = "10zł", width=20)
+        self.__mainWindow.__button10zl.grid(row=8, column=1)
+        self.__mainWindow.__button20zl = tk.Button(self.__mainWindow, text = "20zł", width=20)
+        self.__mainWindow.__button20zl.grid(row=9, column=1)
+        self.__mainWindow.__button50zl = tk.Button(self.__mainWindow, text = "50zł", width=20)
+        self.__mainWindow.__button50zl.grid(row=10, column=1)
 
         #Pole pozwalające wpisać liczbę wrzucanych pieniędzy
         self.__mainWindow.__empty2 = tk.Label(self.__mainWindow, text=" ").grid(row=11)
@@ -102,3 +102,40 @@ class View():
 
     def BindButtonZmianaAktualnejGodziny(self, f):
         self.__mainWindow.__buttonZmianaAktualnejGodziny.bind("<Button>", f)
+
+    def BindButton1gr(self, f):
+        self.__mainWindow.__button1gr.bind("<Button>", lambda event, wartosc=0.01: f(wartosc))
+        
+    def BindButton2gr(self, f):
+        self.__mainWindow.__button2gr.bind("<Button>", lambda event, wartosc=0.02: f(wartosc))
+        
+    def BindButton5gr(self, f):
+        self.__mainWindow.__button5gr.bind("<Button>", lambda event, wartosc=0.05: f(wartosc))
+        
+    def BindButton10gr(self, f):
+        self.__mainWindow.__button10gr.bind("<Button>", lambda event, wartosc=0.10: f(wartosc))
+        
+    def BindButton20gr(self, f):
+        self.__mainWindow.__button20gr.bind("<Button>", lambda event, wartosc=0.20: f(wartosc))
+        
+    def BindButton50gr(self, f):
+        self.__mainWindow.__button50gr.bind("<Button>", lambda event, wartosc=0.50: f(wartosc))
+                
+    def BindButton1zl(self, f):
+        self.__mainWindow.__button1zl.bind("<Button>", lambda event, wartosc=1: f(wartosc))
+                
+    def BindButton2zl(self, f):
+        self.__mainWindow.__button2zl.bind("<Button>", lambda event, wartosc=2: f(wartosc))
+                
+    def BindButton5zl(self, f):
+        self.__mainWindow.__button5zl.bind("<Button>", lambda event, wartosc=5: f(wartosc))
+                
+    def BindButton10zl(self, f):
+        self.__mainWindow.__button10zl.bind("<Button>", lambda event, wartosc=10: f(wartosc))
+                
+    def BindButton20zl(self, f):
+        self.__mainWindow.__button20zl.bind("<Button>", lambda event, wartosc=20: f(wartosc))
+                
+    def BindButton50zl(self, f):
+        self.__mainWindow.__button50zl.bind("<Button>", lambda event, wartosc=50: f(wartosc))
+        
