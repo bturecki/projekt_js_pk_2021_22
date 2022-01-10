@@ -63,13 +63,13 @@ class View():
 
         #Przycisk zatwierdź
         self.__mainWindow.__empty3 = tk.Label(self.__mainWindow, text=" ").grid(row=13)
-        self.__mainWindow.buttonZatwierdz = tk.Button(self.__mainWindow, text = "Zatwierdź", width=40)
-        self.__mainWindow.buttonZatwierdz.grid(row=14, column=0, columnspan = 2)
+        self.__mainWindow.__buttonZatwierdz = tk.Button(self.__mainWindow, text = "Zatwierdź", width=40)
+        self.__mainWindow.__buttonZatwierdz.grid(row=14, column=0, columnspan = 2)
 
         #Zmiana aktualnej godziny
         self.__mainWindow.__empty4 = tk.Label(self.__mainWindow, text=" ").grid(row=13)
-        self.__mainWindow.buttonZmianaAktualnejGodziny = tk.Button(self.__mainWindow, text = "Zmiana aktualnej daty i godziny", width=40)
-        self.__mainWindow.buttonZmianaAktualnejGodziny.grid(row=15, column=0, columnspan=2)
+        self.__mainWindow.__buttonZmianaAktualnejGodziny = tk.Button(self.__mainWindow, text = "Zmiana aktualnej daty i godziny", width=40)
+        self.__mainWindow.__buttonZmianaAktualnejGodziny.grid(row=15, column=0, columnspan=2)
     
     def GetMainWindow(self):
         return self.__mainWindow
@@ -96,3 +96,9 @@ class View():
 
     def SetDataWyjazduZParkingu(self, text):
         self.__mainWindow.__labelDataWyjazduZParkingu.config(text=text)
+
+    def BindButtonZatwierdz(self, f):
+        self.__mainWindow.__buttonZatwierdz.bind("<Button>", f)
+
+    def BindButtonZmianaAktualnejGodziny(self, f):
+        self.__mainWindow.__buttonZmianaAktualnejGodziny.bind("<Button>", f)
