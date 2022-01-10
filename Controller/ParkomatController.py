@@ -115,18 +115,17 @@ class Controller():
         rr = rrule(SECONDLY, byweekday=(MO, TU, WE, TH, FR), byhour=(8,9,10,11,12,13,14,15,16,17,18,19), dtstart=start, interval=x)
         return rr.after(start)
 
-    def getSekundyDlaDodanychPieniedzy(self,suma: int) -> int: #TODO do dokończenia obliczanie daty wyjazdu
+    def getSekundyDlaDodanychPieniedzy(self,suma: int) -> int:
         """
         Funkcja zwracająca czas wyrażony w sekundach, na który pozwala aktalnie
         wrzucona wartość pieniędzy
         """
-        if suma == 1:
-            return 30 * 60
-        t3 = (suma - 6) / 5
-        t2 = math.floor(t3)
-        t = max(0, t2)
-        hours = (suma >= 2) * 1 + (suma >= 6) * 1 + max(0, math.floor((suma - 6) / 5))
-        return hours * 60 * 60
+        if suma <= 2:
+            return (18 * suma * 100)
+        if suma > 2 and suma <= 6:
+            return (9 * (suma - 2) * 100)+ 3600
+        if suma > 6:
+            return (72 * (suma - 6) * 10) + 3600 * 2
 
     def getAktualnaData(self) -> datetime:
         """
