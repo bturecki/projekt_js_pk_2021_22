@@ -16,23 +16,23 @@ class Controller():
         self.przechowywaczPieniedzy = PrzechowywaczPieniedzy()
         self.zmianaAktualnejDaty = ''
         self.view=View(self.root)
-        self.view.mainWindow.button1gr.bind("<Button>", lambda event, wartosc=0.01: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button2gr.bind("<Button>", lambda event, wartosc=0.02: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button5gr.bind("<Button>", lambda event, wartosc=0.05: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button10gr.bind("<Button>", lambda event, wartosc=0.10: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button20gr.bind("<Button>", lambda event, wartosc=0.20: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button50gr.bind("<Button>", lambda event, wartosc=0.50: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button1zl.bind("<Button>", lambda event, wartosc=1: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button2zl.bind("<Button>", lambda event, wartosc=2: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button5zl.bind("<Button>", lambda event, wartosc=5: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button10zl.bind("<Button>", lambda event, wartosc=10: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button20zl.bind("<Button>", lambda event, wartosc=20: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.button50zl.bind("<Button>", lambda event, wartosc=50: self.dodajPieniadze(wartosc))
-        self.view.mainWindow.buttonZatwierdz.bind("<Button>", self.zatwierdz)
-        self.view.mainWindow.buttonZmianaAktualnejGodziny.bind("<Button>", self.zmianaAktualnejGodziny)
-        self.setEntryText(self.view.mainWindow.entryLiczbaWrzucanychPieniedzy, "1")
+        self.view.GetMainWindow().button1gr.bind("<Button>", lambda event, wartosc=0.01: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button2gr.bind("<Button>", lambda event, wartosc=0.02: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button5gr.bind("<Button>", lambda event, wartosc=0.05: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button10gr.bind("<Button>", lambda event, wartosc=0.10: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button20gr.bind("<Button>", lambda event, wartosc=0.20: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button50gr.bind("<Button>", lambda event, wartosc=0.50: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button1zl.bind("<Button>", lambda event, wartosc=1: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button2zl.bind("<Button>", lambda event, wartosc=2: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button5zl.bind("<Button>", lambda event, wartosc=5: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button10zl.bind("<Button>", lambda event, wartosc=10: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button20zl.bind("<Button>", lambda event, wartosc=20: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().button50zl.bind("<Button>", lambda event, wartosc=50: self.dodajPieniadze(wartosc))
+        self.view.GetMainWindow().buttonZatwierdz.bind("<Button>", self.zatwierdz)
+        self.view.GetMainWindow().buttonZmianaAktualnejGodziny.bind("<Button>", self.zmianaAktualnejGodziny)
+        self.view.SetLiczbaWrzucanychPieniedzy("1")
         self.setAktualnyCzas()
-        self.setlLabelText(self.view.mainWindow.labelWrzucono,str(self.przechowywaczPieniedzy.Suma())+" zł")
+        self.view.SetWrzucono(str(self.przechowywaczPieniedzy.Suma())+" zł")
 
     def run(self):
         """
@@ -40,24 +40,11 @@ class Controller():
         """
         self.root.mainloop()
 
-    def setEntryText(self, cntrl, text):
-        """
-        Pomocnik do ustawiania tekstu w kontrolkach typu Entry
-        """
-        cntrl.delete(0, tk.END)
-        cntrl.insert(0,text)
-
-    def setlLabelText(self, cntrl, text):
-        """
-        Pomocnik do ustawiania tekstu w kontrolkach typu Label
-        """
-        cntrl.config(text=text)
-
     def dodajPieniadze(self, wartosc, waluta = 'PLN'):
         """
         Funkcja do dodania wartości wybranej momnety do sumy
         """
-        _liczbaWrzucanychPieniedzy = int(self.view.mainWindow.entryLiczbaWrzucanychPieniedzy.get()) if self.view.mainWindow.entryLiczbaWrzucanychPieniedzy.get().isdigit() else None
+        _liczbaWrzucanychPieniedzy = int(self.view.GetLiczbaWrzucanychPieniedzy()) if self.view.GetLiczbaWrzucanychPieniedzy().isdigit() else None
         if _liczbaWrzucanychPieniedzy is None or _liczbaWrzucanychPieniedzy < 1:
             messagebox.showerror("Błąd", "Liczba wrzucanych pieniędzy musi być liczbą naturalną dodatnią.")
         else:
@@ -66,40 +53,39 @@ class Controller():
                 if result != None:
                     messagebox.showerror("Błąd", result)
                     break
-            self.setlLabelText(self.view.mainWindow.labelWrzucono,str(self.przechowywaczPieniedzy.Suma())+" zł")
+            self.view.SetWrzucono(str(self.przechowywaczPieniedzy.Suma())+" zł")
             self.aktualizacjaCzasu()
-        self.setEntryText(self.view.mainWindow.entryLiczbaWrzucanychPieniedzy, "1")
+        self.view.SetLiczbaWrzucanychPieniedzy("1")
 
     def setAktualnyCzas(self):
         """
         Funkcja odpowiadająca za aktualizacje czasu
         """
         if self.zmianaAktualnejDaty != '':
-            self.view.mainWindow.labelAktualnaData.config(text = self.zmianaAktualnejDaty)
+            self.view.GetMainWindow().labelAktualnaData.config(text = self.zmianaAktualnejDaty)
         else:
-            self.view.mainWindow.labelAktualnaData.config(text = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
+            self.view.GetMainWindow().labelAktualnaData.config(text = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
         
         self.aktualizacjaCzasu()
-        self.view.mainWindow.labelAktualnaData.after(1000, self.setAktualnyCzas)
+        self.view.GetMainWindow().labelAktualnaData.after(1000, self.setAktualnyCzas)
 
 
     def zatwierdz(self,event):
         """
         Funkcja weryfikująca, zatwierdzająca oraz resetująca dane
         """
-        if self.view.GetEntryNumerRejestracyjny() is None or self.view.GetEntryNumerRejestracyjny() == "":
+        if self.view.GetNumerRejestracyjny() is None or self.view.GetNumerRejestracyjny() == "":
                 messagebox.showerror("Błąd", "Nie wpisano numeru rejestracyjnego pojazdu.")
-        elif bool(re.match('^[A-Z0-9]*$', self.view.GetEntryNumerRejestracyjny())) == False:
+        elif bool(re.match('^[A-Z0-9]*$', self.view.GetNumerRejestracyjny())) == False:
                 messagebox.showerror("Błąd", "Numer rejestracyjny może składać się tylko z wielkich liter od A do Z i cyfr.")
         elif self.przechowywaczPieniedzy.Suma() == 0:
                 messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
         else:
-            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.view.GetEntryNumerRejestracyjny() + ", czas zakupu: " + self.view.mainWindow.labelAktualnaData.cget("text") + ", termin wyjazdu: " + self.view.mainWindow.labelDataWyjazduZParkingu.cget("text"))
+            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.view.GetNumerRejestracyjny() + ", czas zakupu: " + self.view.GetMainWindow().labelAktualnaData.cget("text") + ", termin wyjazdu: " + self.view.GetDataWyjazduZParkingu())
             self.resetData()
-            self.setEntryText(self.view.mainWindow.entryLiczbaWrzucanychPieniedzy, "1")
-            self.view.SetEntryNumerRejestracyjny("")
-            self.setlLabelText(self.view.mainWindow.labelWrzucono,str(self.przechowywaczPieniedzy.Suma())+" zł")
-
+            self.view.SetLiczbaWrzucanychPieniedzy("1")
+            self.view.SetNumerRejestracyjny("")
+            self.view.SetWrzucono(str(self.przechowywaczPieniedzy.Suma())+" zł")
 
     def resetData(self):
         """
@@ -134,16 +120,16 @@ class Controller():
         """
         Funkcja zwracająca aktualnie wybraną date jako obiekt typu datetime
         """
-        return datetime.strptime(self.view.mainWindow.labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
+        return datetime.strptime(self.view.GetMainWindow().labelAktualnaData.cget("text"),'%d.%m.%Y %H:%M:%S')
 
     def aktualizacjaCzasu(self):
         """
         Funkcja aktualizujaca czas wyjazdu
         """
         if  self.przechowywaczPieniedzy.Suma() >= 1:
-            self.setlLabelText(self.view.mainWindow.labelDataWyjazduZParkingu,self.pobierzDateSekundy(self.getAktualnaData(), self.getSekundyDlaDodanychPieniedzy(self.przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
+            self.view.SetDataWyjazduZParkingu(self.pobierzDateSekundy(self.getAktualnaData(), self.getSekundyDlaDodanychPieniedzy(self.przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
         else:
-            self.view.mainWindow.labelDataWyjazduZParkingu.config(text = "---------------------")
+            self.view.SetDataWyjazduZParkingu("---------------------")
 
     def zmianaAktualnejGodziny(self, event):
         """
