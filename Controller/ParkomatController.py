@@ -35,6 +35,9 @@ class Controller():
         self.setlLabelText(self.view.mainWindow.labelWrzucono,str(self.przechowywaczPieniedzy.Suma())+" zł")
 
     def run(self):
+        """
+        Uruchamia główną pętle programu
+        """
         self.root.mainloop()
 
     def setEntryText(self, cntrl, text):
@@ -84,17 +87,17 @@ class Controller():
         """
         Funkcja weryfikująca, zatwierdzająca oraz resetująca dane
         """
-        if self.view.mainWindow.entryNumerRejestracyjny.get() is None or self.view.mainWindow.entryNumerRejestracyjny.get() == "":
+        if self.view.GetEntryNumerRejestracyjny() is None or self.view.GetEntryNumerRejestracyjny() == "":
                 messagebox.showerror("Błąd", "Nie wpisano numeru rejestracyjnego pojazdu.")
-        elif bool(re.match('^[A-Z0-9]*$', self.view.mainWindow.entryNumerRejestracyjny.get())) == False:
+        elif bool(re.match('^[A-Z0-9]*$', self.view.GetEntryNumerRejestracyjny())) == False:
                 messagebox.showerror("Błąd", "Numer rejestracyjny może składać się tylko z wielkich liter od A do Z i cyfr.")
         elif self.przechowywaczPieniedzy.Suma() == 0:
                 messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
         else:
-            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.view.mainWindow.entryNumerRejestracyjny.get() + ", czas zakupu: " + self.view.mainWindow.labelAktualnaData.cget("text") + ", termin wyjazdu: " + self.view.mainWindow.labelDataWyjazduZParkingu.cget("text"))
+            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.view.GetEntryNumerRejestracyjny() + ", czas zakupu: " + self.view.mainWindow.labelAktualnaData.cget("text") + ", termin wyjazdu: " + self.view.mainWindow.labelDataWyjazduZParkingu.cget("text"))
             self.resetData()
             self.setEntryText(self.view.mainWindow.entryLiczbaWrzucanychPieniedzy, "1")
-            self.setEntryText(self.view.mainWindow.entryNumerRejestracyjny, "")
+            self.view.SetEntryNumerRejestracyjny("")
             self.setlLabelText(self.view.mainWindow.labelWrzucono,str(self.przechowywaczPieniedzy.Suma())+" zł")
 
 
@@ -105,14 +108,14 @@ class Controller():
         self.przechowywaczPieniedzy.Reset()
         self.zmianaAktualnejDaty = ''
 
-    def pobierzDateSekundy(self,start, x):
+    def pobierzDateSekundy(self,start, liczbaSekund):
         """
         Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
         która jest aktualnie opłacona jeśli chodzi o parkowanie
         """
-        if x == 0:
+        if liczbaSekund == 0:
             return start
-        rr = rrule(SECONDLY, byweekday=(MO, TU, WE, TH, FR), byhour=(8,9,10,11,12,13,14,15,16,17,18,19), dtstart=start, interval=x)
+        rr = rrule(SECONDLY, byweekday=(MO, TU, WE, TH, FR), byhour=(8,9,10,11,12,13,14,15,16,17,18,19), dtstart=start, interval=liczbaSekund)
         return rr.after(start)
 
     def getSekundyDlaDodanychPieniedzy(self,suma: int) -> int:

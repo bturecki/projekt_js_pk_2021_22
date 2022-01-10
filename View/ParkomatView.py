@@ -10,8 +10,8 @@ class View():
         self.mainWindow.eval('tk::PlaceWindow . center')
         #Pole tekstowe na numer rejestracyjny pojazdu
         self.mainWindow.labelNumerRejestracyjny = tk.Label(self.mainWindow, text="Numer rejestracyjny: ", width=20).grid(row=0, column=0)
-        self.mainWindow.entryNumerRejestracyjny = tk.Entry(self.mainWindow, width=20)
-        self.mainWindow.entryNumerRejestracyjny.grid(row=0, column=1)
+        self.mainWindow.__entryNumerRejestracyjny = tk.Entry(self.mainWindow, width=20)
+        self.mainWindow.__entryNumerRejestracyjny.grid(row=0, column=1)
         #Aktualna data
         self.mainWindow.labelAktualnaDataLbl = tk.Label(self.mainWindow, text="Aktualna data: ", width=20).grid(row=1, column=0)
         self.mainWindow.labelAktualnaData = tk.Label(self.mainWindow, width=20)
@@ -68,6 +68,12 @@ class View():
 
         #Zmiana aktualnej godziny
         self.mainWindow.empty4 = tk.Label(self.mainWindow, text=" ").grid(row=13)
-        self.mainWindow.buttonZmianaAktualnejGodziny = tk.Button(self.mainWindow, text = "Zmiana aktualnej godziny", width=40)
+        self.mainWindow.buttonZmianaAktualnejGodziny = tk.Button(self.mainWindow, text = "Zmiana aktualnej daty i godziny", width=40)
         self.mainWindow.buttonZmianaAktualnejGodziny.grid(row=15, column=0, columnspan=2)
     
+    def GetEntryNumerRejestracyjny(self):
+        return self.mainWindow.__entryNumerRejestracyjny.get()
+
+    def SetEntryNumerRejestracyjny(self, text):
+        self.mainWindow.__entryNumerRejestracyjny.delete(0, tk.END)
+        self.mainWindow.__entryNumerRejestracyjny.insert(0,text)
