@@ -26,16 +26,9 @@ class DateSelectorController():
         Uruchamia główną pętle okna
         """
         self.__root.wait_window(self.__root)
-
-    def setWrongData(self):
+    
+    def GetView(self):
         """
-        Tylko na potrzeby testów jednostkowych, normalnie wyklikuje się to w GUI
+        Funkcja zwracająca instancje widoku. Tylko do testów jednostykowych.
         """
-        self.__view.SetGodzina(222)
-
-    def setData(self):
-        """
-        Tylko na potrzeby testów jednostkowych, normalnie wyklikuje się to w GUI
-        """
-        self.__view.SetGodzina(12)
-        self.__view.SetMinuta(34)
+        return self.__view
