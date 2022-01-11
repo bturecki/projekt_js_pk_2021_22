@@ -1,52 +1,76 @@
 import tkinter
 from tkinter import messagebox
 import unittest
+from Controller import ParkomatController
 from Controller.ParkomatController import Controller
 from Exceptions.ParkomatExceptions import ZlyNominalExcepion
 
-class TestParkomat5(unittest.TestCase):
-    
-    def test_1_zl(self):
+class TestsParkomat(unittest.TestCase):
+                               
+    def test_1(self): #TODO dokończyć
         parkomatApp = Controller()
-        parkomatApp.__view.SetNumerRejestracyjny("KRA123")
+        parkomatApp.setAktualnaData("21.01.2022 19:00:00")
+        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.dodajPieniadze(5)
+        parkomatApp.zatwierdz("<Button>")
+        parkomatApp.resetData()
+
+    def test_2(self): #TODO dokończyć
+        parkomatApp = Controller()
+        parkomatApp.setAktualnaData("21.01.2022 19:00:00")
+        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.dodajPieniadze(5)
+        parkomatApp.zatwierdz("<Button>")
+        parkomatApp.resetData()
+
+    def test_3(self):
+        parkomatApp = Controller()
+        parkomatApp.setAktualnaData("20.01.2022 19:00:01")
+        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.dodajPieniadze(5)
+        parkomatApp.zatwierdz("<Button>")
+        parkomatApp.resetData()
+
+    def test_4(self):
+        parkomatApp = Controller()
+        parkomatApp.setAktualnaData("21.01.2022 19:00:01")
+        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.dodajPieniadze(5)
+        parkomatApp.zatwierdz("<Button>")
+        parkomatApp.resetData()
+        
+    def test_5(self):
+        parkomatApp = Controller()
+        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
         parkomatApp.dodajPieniadze(1)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
-        parkomatApp.__view.mainWindow.destroy()
 
-class TestParkomat6(unittest.TestCase):
-    
-    def test_200_monet(self):
+    def test_6(self):
         parkomatApp = Controller()
-        parkomatApp.__view.SetNumerRejestracyjny("KR321")
-        parkomatApp.__view.SetLiczbaWrzucanychPieniedzy("200")
+        parkomatApp.GetView().SetNumerRejestracyjny("KR321")
+        parkomatApp.GetView().SetLiczbaWrzucanychPieniedzy("200")
         parkomatApp.dodajPieniadze(0.01)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
 
-class TestParkomat7(unittest.TestCase):
-    
-    def test_201_monet(self):
+    def test_7(self):
         parkomatApp = Controller()
-        parkomatApp.__view.SetLiczbaWrzucanychPieniedzy("201")
+        parkomatApp.GetView().SetLiczbaWrzucanychPieniedzy("201")
         parkomatApp.dodajPieniadze(0.01)
         parkomatApp.resetData()
 
-class TestParkomat8(unittest.TestCase):
-
-    def test_zatwierdz_bez_wrzucenia_monet(self):
+    def test_8(self):
         parkomatApp = Controller()
-        parkomatApp.__view.SetNumerRejestracyjny("KRA123")
+        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
 
-class TestParkomat9(unittest.TestCase):
-
-    def test_zatwierdz_bez_lub_bledny_numer_rej(self):
+    def test_9(self):
         parkomatApp = Controller()
         parkomatApp.dodajPieniadze(10)
         parkomatApp.zatwierdz("<Button>")
-        parkomatApp.SetNumerRejestracyjny("asfasf")
+        parkomatApp.GetView().SetNumerRejestracyjny("asfasf")
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
 

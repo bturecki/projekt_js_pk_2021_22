@@ -134,3 +134,9 @@ class Controller():
         Funkcja otwierająca okno służące do wyboru niestandardowej daty oraz godziny
         """
         DateSelectorController(self)
+
+    def GetView(self):
+        """
+        Funkcja zwracająca instancje widoku. Tylko do testów jednostykowych.
+        """
+        return self.__view
