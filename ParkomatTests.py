@@ -2,7 +2,7 @@ import tkinter
 from tkinter import messagebox
 import unittest
 from Controller.ParkomatController import Controller
-from Model.ParkomatExceptions import ZlyNominalExcepion
+from Exceptions.ParkomatExceptions import ZlyNominalExcepion
 
 class TestParkomat5(unittest.TestCase):
     
