@@ -2,7 +2,10 @@ import tkinter as tk
 from datetime import datetime
 
 class View():
-
+    """
+    Główny widok parkomatu
+    """
+    
     def __init__(self, master):
         self.__mainWindow = master
         self.__mainWindow.title("Parkomat")

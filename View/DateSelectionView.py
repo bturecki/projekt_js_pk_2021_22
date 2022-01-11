@@ -2,6 +2,10 @@ import tkinter as tk
 from tkcalendar import DateEntry
 
 class DateSelectorView():
+    """
+    Widok do zmiany aktuanlej daty i godziny
+    """
+
     def __init__(self, master):
         self.__window = master
         self.__window.title("")

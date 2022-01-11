@@ -4,7 +4,9 @@ from datetime import datetime, timedelta
 from View.DateSelectionView import DateSelectorView
 
 class DateSelectorController():
-
+    """
+    Klasa obsługująca logikę zmiany daty z poziomu GUI
+    """
     def zmianaAktualnejGodzinyClose(self):
         _godziny = int(self.__view.GetGodzina()) if self.__view.GetGodzina().isdigit() else None
         _minuty = int(self.__view.GetMinuta()) if self.__view.GetMinuta().isdigit() else None

@@ -11,7 +11,9 @@ from View.ParkomatView import View
 
             
 class Controller():
-
+    """
+    Główna klasa obsługująca logikę parkomatu
+    """
     def __init__(self):
         self.__root = tk.Tk()
         self.__przechowywaczPieniedzy = PrzechowywaczPieniedzy()
@@ -58,9 +60,6 @@ class Controller():
             self.__view.SetWrzucono(str(self.__przechowywaczPieniedzy.Suma())+" zł")
             self.aktualizacjaCzasu()
         self.__view.SetLiczbaWrzucanychPieniedzy("1")
-
-    def setAktualnaData(self, data):
-        self.__zmianaAktualnejDaty = data
 
     def setAktualnyCzas(self):
         """
@@ -142,3 +141,9 @@ class Controller():
         Funkcja zwracająca instancje widoku. Tylko do testów jednostkowych.
         """
         return self.__view
+    
+    def setAktualnaData(self, data):
+        """
+        Funkcja ustawiająca aktualną datę. Tylko do testów jednostkowych.
+        """
+        self.__zmianaAktualnejDaty = data
