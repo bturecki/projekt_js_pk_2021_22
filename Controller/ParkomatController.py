@@ -85,6 +85,7 @@ class Controller():
         elif self.__przechowywaczPieniedzy.Suma() == 0:
                 messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
         else:
+            self.setAktualnyCzas()
             messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.GetNumerRejestracyjny() + ", czas zakupu: " + self.__view.GetAktualnaData().strftime('%d.%m.%Y %H:%M:%S') + ", termin wyjazdu: " + self.__view.GetDataWyjazduZParkingu())
             self.resetData()
             self.__view.SetLiczbaWrzucanychPieniedzy("1")
@@ -138,6 +139,6 @@ class Controller():
 
     def GetView(self):
         """
-        Funkcja zwracająca instancje widoku. Tylko do testów jednostykowych.
+        Funkcja zwracająca instancje widoku. Tylko do testów jednostkowych.
         """
         return self.__view

@@ -29,6 +29,6 @@ class DateSelectorController():
     
     def GetView(self):
         """
-        Funkcja zwracająca instancje widoku. Tylko do testów jednostykowych.
+        Funkcja zwracająca instancje widoku. Tylko do testów jednostkowych.
         """
         return self.__view
