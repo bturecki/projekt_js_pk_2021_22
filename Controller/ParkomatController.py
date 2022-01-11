@@ -133,7 +133,8 @@ class Controller():
         """
         Funkcja otwierająca okno służące do wyboru niestandardowej daty oraz godziny
         """
-        DateSelectorController(self)
+        dsc = DateSelectorController(self)
+        dsc.run()
 
     def GetView(self):
         """

@@ -20,4 +20,22 @@ class DateSelectorController():
             self.__parent = parent
             self.__view = DateSelectorView(self.__root)
             self.__view.BindButtonOk(self.zmianaAktualnejGodzinyClose)
-            self.__root.wait_window(self.__root)
+
+    def run(self):
+        """
+        Uruchamia główną pętle okna
+        """
+        self.__root.wait_window(self.__root)
+
+    def setWrongData(self):
+        """
+        Tylko na potrzeby testów jednostkowych, normalnie wyklikuje się to w GUI
+        """
+        self.__view.SetGodzina(222)
+
+    def setData(self):
+        """
+        Tylko na potrzeby testów jednostkowych, normalnie wyklikuje się to w GUI
+        """
+        self.__view.SetGodzina(12)
+        self.__view.SetMinuta(34)

@@ -2,23 +2,26 @@ import tkinter
 from tkinter import messagebox
 import unittest
 from Controller import ParkomatController
+from Controller.DateSelectionController import DateSelectorController
 from Controller.ParkomatController import Controller
 from Exceptions.ParkomatExceptions import ZlyNominalExcepion
 
 class TestsParkomat(unittest.TestCase):
                                
-    def test_1(self): #TODO dokończyć
+    def test_1(self):
         parkomatApp = Controller()
-        parkomatApp.setAktualnaData("21.01.2022 19:00:00")
-        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
-        parkomatApp.dodajPieniadze(5)
-        parkomatApp.zatwierdz("<Button>")
+        t = DateSelectorController(parkomatApp)
+        t.setWrongData()
+        t.zmianaAktualnejGodzinyClose()
+        t.setData()
+        t.zmianaAktualnejGodzinyClose()
         parkomatApp.resetData()
 
-    def test_2(self): #TODO dokończyć
+    def test_2(self):
         parkomatApp = Controller()
-        parkomatApp.setAktualnaData("21.01.2022 19:00:00")
-        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.dodajPieniadze(2)
+        parkomatApp.dodajPieniadze(4)
+        parkomatApp.dodajPieniadze(5)
         parkomatApp.dodajPieniadze(5)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()

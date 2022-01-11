@@ -31,11 +31,23 @@ class DateSelectorView():
     def GetGodzina(self):
         return self.__window.__entryGodzina.get()
         
+    def SetGodzina(self, m):
+        self.__window.__entryGodzina.delete(0, tk.END)
+        self.__window.__entryGodzina.insert(0,m)
+        
     def GetMinuta(self):
         return self.__window.__entryMinuta.get()
         
+    def SetMinuta(self, m):
+        self.__window.__entryMinuta.delete(0, tk.END)
+        self.__window.__entryMinuta.insert(0,m)
+
     def GetSekunda(self):
         return self.__window.__entrySekunda.get()
+
+    def SetSekunda(self, m):
+        self.__window.__entrySekunda.delete(0, tk.END)
+        self.__window.__entrySekunda.insert(0,m)
         
     def GetData(self):
         return self.__window.__cal.get_date()
