@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import messagebox
 from datetime import datetime, timedelta
-from View.DateSelectionView import DateSelectionView
+from View.DateSelectionView import DateSelectorView
 
-class DateSelectionController():
+class DateSelectorController():
 
     def zmianaAktualnejGodzinyClose(self):
         _godziny = int(self.__view.GetGodzina()) if self.__view.GetGodzina().isdigit() else None
@@ -18,6 +18,6 @@ class DateSelectionController():
     def __init__(self, parent):
             self.__root = tk.Toplevel()
             self.__parent = parent
-            self.__view = DateSelectionView(self.__root)
+            self.__view = DateSelectorView(self.__root)
             self.__view.BindButtonOk(self.zmianaAktualnejGodzinyClose)
             self.__root.wait_window(self.__root)

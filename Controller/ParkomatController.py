@@ -4,7 +4,7 @@ import time
 from dateutil.rrule import *  
 import re
 import math
-from Controller.DateSelectionController import DateSelectionController
+from Controller.DateSelectionController import DateSelectorController
 from Model.Pieniadze import *
 from View.ParkomatView import View
 
@@ -133,4 +133,4 @@ class Controller():
         """
         Funkcja otwierająca okno służące do wyboru niestandardowej daty oraz godziny
         """
-        DateSelectionController(self)
+        DateSelectorController(self)
