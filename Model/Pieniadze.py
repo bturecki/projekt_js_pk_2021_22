@@ -39,16 +39,21 @@ class PrzechowywaczPieniedzy:
      __lista = []
 
      def DodajPieniadze(self, pieniadz):
-        if isinstance(pieniadz, Pieniadz):
-            if isinstance(pieniadz, Moneta):
-                if len([p for p in self.__lista if p.GetWartosc() == pieniadz.GetWartosc()]) == 200:
-                    return "Automat przepełniony monetami o wartości " + str(pieniadz.GetWartosc()) + " " + pieniadz.GetWaluta() + "! Wrzuć inny nominał."
-            if pieniadz.GetWaluta() == self.__waluta:
-                self.__lista.append(pieniadz)
+        try:
+            if isinstance(pieniadz, Pieniadz):
+                if isinstance(pieniadz, Moneta):
+                    if len([p for p in self.__lista if p.GetWartosc() == pieniadz.GetWartosc()]) == 200:
+                        raise PrzepelnionyBankomatException("Automat przepełniony monetami o wartości " + str(pieniadz.GetWartosc()) + " " + pieniadz.GetWaluta() + "! Wrzuć inny nominał.")
+                if pieniadz.GetWaluta() == self.__waluta:
+                    self.__lista.append(pieniadz)
+                else:
+                    raise NieznanaWalutaException(pieniadz.GetWaluta())
             else:
-                raise NieznanaWalutaException(pieniadz.GetWaluta())
-        else:
-            raise ValueError("Przesyłany pieniadz musi byc typu Pieniadz.")
+                raise ValueError("Przesyłany pieniadz musi byc typu Pieniadz.")
+        except PrzepelnionyBankomatException as ex: #Obsługuję tylko ten błąd, ponieważ jest to błąd, który faktycznie może mieć miejsce i jest przewidziany.
+            return ex                               
+        except:                                     #Reszta błędów powinna być wyrzucana jako błąd programu.
+            raise
 
      def Suma(self):
         s = 0
