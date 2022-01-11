@@ -1,14 +1,15 @@
 import tkinter as tk
 from tkinter import messagebox
 import time
-from tkcalendar import DateEntry
-from datetime import datetime, timedelta
 from dateutil.rrule import *  
 import re
 import math
+from Controller.DateSelectionController import DateSelectionController
 from Model.Pieniadze import *
 from View.ParkomatView import View
 
+
+            
 class Controller():
 
     def __init__(self):
@@ -35,7 +36,6 @@ class Controller():
         self.__view.ResetDataWyjazduZParkingu()
         self.setAktualnyCzas()
 
-
     def run(self):
         """
         Uruchamia główną pętle programu
@@ -58,6 +58,9 @@ class Controller():
             self.__view.SetWrzucono(str(self.__przechowywaczPieniedzy.Suma())+" zł")
             self.aktualizacjaCzasu()
         self.__view.SetLiczbaWrzucanychPieniedzy("1")
+
+    def setAktualnaData(self, data):
+        self.__zmianaAktualnejDaty = data
 
     def setAktualnyCzas(self):
         """
@@ -82,7 +85,7 @@ class Controller():
         elif self.__przechowywaczPieniedzy.Suma() == 0:
                 messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
         else:
-            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.GetNumerRejestracyjny() + ", czas zakupu: " + self.__view.GetAktualnaData() + ", termin wyjazdu: " + self.__view.GetDataWyjazduZParkingu())
+            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.GetNumerRejestracyjny() + ", czas zakupu: " + self.__view.GetAktualnaData().strftime('%d.%m.%Y %H:%M:%S') + ", termin wyjazdu: " + self.__view.GetDataWyjazduZParkingu())
             self.resetData()
             self.__view.SetLiczbaWrzucanychPieniedzy("1")
             self.__view.SetNumerRejestracyjny("")
@@ -130,42 +133,4 @@ class Controller():
         """
         Funkcja otwierająca okno służące do wyboru niestandardowej daty oraz godziny
         """
-        wybranaData = None
-        windowZmianaAktualnejGodziny = tk.Toplevel()
-        windowZmianaAktualnejGodziny.title("Zmiana godziny")
-        windowZmianaAktualnejGodziny.wm_iconbitmap('Resources/IkonaParkomat.ico')
-        cal = DateEntry(windowZmianaAktualnejGodziny,selectmode='day', background='darkblue', foreground='white', borderwidth=2)
-        cal.grid(row=0, column=0)
-        entryGodzina = tk.Entry(windowZmianaAktualnejGodziny, width = 2)
-        entryGodzina.grid(row=0, column=1)
-        tk.Label(windowZmianaAktualnejGodziny, text=":", width=1).grid(row=0, column=2)
-        entryMinuta = tk.Entry(windowZmianaAktualnejGodziny, width = 2)
-        entryMinuta.grid(row=0, column=3)
-        tk.Label(windowZmianaAktualnejGodziny, text=":", width=0).grid(row=0, column=4)
-        entrySekunda = tk.Entry(windowZmianaAktualnejGodziny, width = 2)
-        entrySekunda.grid(row=0, column=5)
-
-        def zmianaAktualnejGodzinyClose():
-            _godziny = int(entryGodzina.get()) if entryGodzina.get().isdigit() else None
-            _minuty = int(entryMinuta.get()) if entryMinuta.get().isdigit() else None
-            _sekundy = int(entrySekunda.get()) if entrySekunda.get().isdigit() else None
-            if(_godziny is None or _godziny < 0 or _godziny > 23 or _minuty is None or _minuty < 0 or _minuty > 60 or _sekundy is None or _sekundy < 0 or _sekundy > 60):
-                messagebox.showerror("Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
-            else:
-                _data = (datetime.strptime(cal.get_date().strftime('%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds= _sekundy)).strftime('%d.%m.%Y %H:%M:%S')
-                nonlocal wybranaData
-                wybranaData = _data
-                windowZmianaAktualnejGodziny.destroy()
-
-        buttonOk = tk.Button(windowZmianaAktualnejGodziny, text = "OK", width=2, command= zmianaAktualnejGodzinyClose)
-        buttonOk.grid(row=0, column=6)
-        entryGodzina.delete(0, tk.END)
-        entryGodzina.insert(0,"00")
-        entryMinuta.delete(0, tk.END)
-        entryMinuta.insert(0,"00")
-        entrySekunda.delete(0, tk.END)
-        entrySekunda.insert(0,"00")
-
-        windowZmianaAktualnejGodziny.wait_window(windowZmianaAktualnejGodziny)
-        
-        self.__zmianaAktualnejDaty = wybranaData
+        DateSelectionController(self)

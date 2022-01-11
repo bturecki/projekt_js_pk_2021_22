@@ -1,6 +1,5 @@
 import tkinter as tk
-import time
-from datetime import datetime, timedelta
+from datetime import datetime
 
 class View():
 
@@ -148,4 +147,3 @@ class View():
                 
     def BindButton50zl(self, f):
         self.__mainWindow.__button50zl.bind("<Button>", lambda event, wartosc=50: f(wartosc))
-        
