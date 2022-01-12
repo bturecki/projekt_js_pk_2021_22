@@ -63,7 +63,7 @@ class PrzechowywaczPieniedzy:
         try:
             if isinstance(pieniadz, Pieniadz):
                 if isinstance(pieniadz, Moneta):
-                    if len([p for p in self.__lista if p.GetWartosc() == pieniadz.GetWartosc()]) == 200:
+                    if self.LiczbaNominalu(pieniadz.GetWartosc()) == 200:
                         raise PrzepelnionyBankomatException("Automat przepełniony monetami o wartości " + str(
                             pieniadz.GetWartosc()) + " " + pieniadz.GetWaluta() + "! Wrzuć inny nominał.")
                 if pieniadz.GetWaluta() == self.__waluta:
@@ -82,10 +82,19 @@ class PrzechowywaczPieniedzy:
         """
         Funkcja zwracająca sumę wrzuconych pieniędzy
         """
-        s = 0
-        for x in self.__lista:
-            s = s + round(x.GetWartosc(), 2)
-        return round(s, 2)
+        return sum([p.GetWartosc() for p in self.__lista])
+
+    def LiczbaNominalu(self, nominal):
+        """
+        Funkcja zwracająca liczbę monet danego rodzaju
+        """
+        return len([p.GetWartosc() for p in self.__lista if p.GetWartosc() == nominal])
+
+    def LiczbaWaluty(self, waluta):
+        """
+        Funkcja zwracająca liczbę pieniędzy danej waluty
+        """
+        return len([p.GetWaluta() for p in self.__lista if p.GetWaluta() == waluta])
 
     def Reset(self):
         """
