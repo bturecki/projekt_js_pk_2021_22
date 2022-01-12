@@ -1,3 +1,4 @@
+import datetime
 import tkinter as tk
 from tkinter import messagebox
 import time
@@ -113,11 +114,34 @@ class Controller():
         Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
         która jest aktualnie opłacona jeśli chodzi o parkowanie
         """
+        _start = self.getDataWyjazdu(start, liczbaSekund)
         if liczbaSekund == 0:
-            return start
+            return _start
         rr = rrule(SECONDLY, byweekday=(MO, TU, WE, TH, FR), byhour=(
-            8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19), dtstart=start, interval=liczbaSekund)
-        return rr.after(start)
+            8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19), dtstart=_start, interval=liczbaSekund)
+        t = rr.after(_start)
+        return t
+
+    def getDataWyjazdu(self, start, liczbaSekund) -> datetime:
+        """
+        Funkcja zwracająca datę wyjazdu z walidacją godzin i dni kiedy parkomat nie działa
+        """
+        darmowe_godziny = [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
+
+        if liczbaSekund > 0:
+            if start.hour in darmowe_godziny:
+                
+                if start.weekday() == 4:
+                    start = start + datetime.timedelta(days=3)
+                elif start.weekday() == 5:
+                    start = start + datetime.timedelta(days=2)
+                elif start.weekday() == 6:
+                    start = start + datetime.timedelta(days=1)
+
+                if start.hour > 19 or start.hour < 8:
+                    start = start.replace(hour=8, minute=00)
+
+        return start
 
     def getSekundyDlaDodanychPieniedzy(self, suma: int) -> int:
         """
