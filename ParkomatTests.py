@@ -6,8 +6,9 @@ from Controller.DateSelectionController import DateSelectorController
 from Controller.ParkomatController import Controller
 from Exceptions.ParkomatExceptions import ZlyNominalExcepion
 
+
 class TestsParkomat(unittest.TestCase):
-                               
+
     def test_1(self):
         parkomatApp = Controller()
         t = DateSelectorController(parkomatApp)
@@ -42,7 +43,7 @@ class TestsParkomat(unittest.TestCase):
         parkomatApp.dodajPieniadze(5)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
-        
+
     def test_5(self):
         parkomatApp = Controller()
         parkomatApp.GetView().NumerRejestracyjny = "KRA123"
@@ -77,6 +78,7 @@ class TestsParkomat(unittest.TestCase):
         parkomatApp.GetView().NumerRejestracyjny = "asdasfsad"
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
+
 
 if __name__ == "__main__":
     unittest.main()
