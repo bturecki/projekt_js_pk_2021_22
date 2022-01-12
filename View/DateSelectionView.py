@@ -32,26 +32,33 @@ class DateSelectorView():
     def BindButtonOk(self, f):
         self.__window.__buttonOk.bind("<Button>", lambda event: f())
 
-    def GetGodzina(self):
+    @property
+    def Godzina(self):
         return self.__window.__entryGodzina.get()
-        
-    def SetGodzina(self, m):
+    
+    @Godzina.setter  
+    def Godzina(self, m):
         self.__window.__entryGodzina.delete(0, tk.END)
         self.__window.__entryGodzina.insert(0,m)
         
-    def GetMinuta(self):
+    @property
+    def Minuta(self):
         return self.__window.__entryMinuta.get()
         
-    def SetMinuta(self, m):
+    @Minuta.setter  
+    def Minuta(self, m):
         self.__window.__entryMinuta.delete(0, tk.END)
         self.__window.__entryMinuta.insert(0,m)
 
-    def GetSekunda(self):
+    @property
+    def Sekunda(self):
         return self.__window.__entrySekunda.get()
 
-    def SetSekunda(self, m):
+    @Sekunda.setter  
+    def Sekunda(self, m):
         self.__window.__entrySekunda.delete(0, tk.END)
         self.__window.__entrySekunda.insert(0,m)
         
-    def GetData(self):
+    @property
+    def Data(self):
         return self.__window.__cal.get_date()

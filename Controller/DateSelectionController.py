@@ -8,13 +8,13 @@ class DateSelectorController():
     Klasa obsługująca logikę zmiany daty z poziomu GUI
     """
     def zmianaAktualnejGodzinyClose(self):
-        _godziny = int(self.__view.GetGodzina()) if self.__view.GetGodzina().isdigit() else None
-        _minuty = int(self.__view.GetMinuta()) if self.__view.GetMinuta().isdigit() else None
-        _sekundy = int(self.__view.GetSekunda()) if self.__view.GetSekunda().isdigit() else None
+        _godziny = int(self.__view.Godzina) if self.__view.Godzina.isdigit() else None
+        _minuty = int(self.__view.Minuta) if self.__view.Minuta.isdigit() else None
+        _sekundy = int(self.__view.Sekunda) if self.__view.Sekunda.isdigit() else None
         if(_godziny is None or _godziny < 0 or _godziny > 23 or _minuty is None or _minuty < 0 or _minuty > 60 or _sekundy is None or _sekundy < 0 or _sekundy > 60):
             messagebox.showerror("Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
         else:
-            self.__parent.setAktualnaData((datetime.strptime(self.__view.GetData().strftime('%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds= _sekundy)).strftime('%d.%m.%Y %H:%M:%S'))
+            self.__parent.setAktualnaData((datetime.strptime(self.__view.Data.strftime('%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds= _sekundy)).strftime('%d.%m.%Y %H:%M:%S'))
             self.__root.destroy()
 
     def __init__(self, parent):

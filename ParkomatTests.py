@@ -11,10 +11,10 @@ class TestsParkomat(unittest.TestCase):
     def test_1(self):
         parkomatApp = Controller()
         t = DateSelectorController(parkomatApp)
-        t.GetView().SetGodzina(25)
+        t.GetView().Godzina = 25
         t.zmianaAktualnejGodzinyClose()
-        t.GetView().SetGodzina(12)
-        t.GetView().SetMinuta(34)
+        t.GetView().Godzina = 12
+        t.GetView().Minuta = 34
         t.zmianaAktualnejGodzinyClose()
         parkomatApp.resetData()
 
