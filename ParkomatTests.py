@@ -30,7 +30,7 @@ class TestsParkomat(unittest.TestCase):
     def test_3(self):
         parkomatApp = Controller()
         parkomatApp.setAktualnaData("20.01.2022 19:00:01")
-        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         parkomatApp.dodajPieniadze(5)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
@@ -38,35 +38,35 @@ class TestsParkomat(unittest.TestCase):
     def test_4(self):
         parkomatApp = Controller()
         parkomatApp.setAktualnaData("21.01.2022 19:00:01")
-        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         parkomatApp.dodajPieniadze(5)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
         
     def test_5(self):
         parkomatApp = Controller()
-        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         parkomatApp.dodajPieniadze(1)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
 
     def test_6(self):
         parkomatApp = Controller()
-        parkomatApp.GetView().SetNumerRejestracyjny("KR321")
-        parkomatApp.GetView().SetLiczbaWrzucanychPieniedzy("200")
+        parkomatApp.GetView().NumerRejestracyjny = "KRA321"
+        parkomatApp.GetView().LiczbaWrzucanychPieniedzy = "200"
         parkomatApp.dodajPieniadze(0.01)
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
 
     def test_7(self):
         parkomatApp = Controller()
-        parkomatApp.GetView().SetLiczbaWrzucanychPieniedzy("201")
+        parkomatApp.GetView().LiczbaWrzucanychPieniedzy = "200"
         parkomatApp.dodajPieniadze(0.01)
         parkomatApp.resetData()
 
     def test_8(self):
         parkomatApp = Controller()
-        parkomatApp.GetView().SetNumerRejestracyjny("KRA123")
+        parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
 
@@ -74,7 +74,7 @@ class TestsParkomat(unittest.TestCase):
         parkomatApp = Controller()
         parkomatApp.dodajPieniadze(10)
         parkomatApp.zatwierdz("<Button>")
-        parkomatApp.GetView().SetNumerRejestracyjny("asfasf")
+        parkomatApp.GetView().NumerRejestracyjny = "asdasfsad"
         parkomatApp.zatwierdz("<Button>")
         parkomatApp.resetData()
 

@@ -36,7 +36,7 @@ class DateSelectorView():
     def Godzina(self):
         return self.__window.__entryGodzina.get()
     
-    @Godzina.setter  
+    @Godzina.setter
     def Godzina(self, m):
         self.__window.__entryGodzina.delete(0, tk.END)
         self.__window.__entryGodzina.insert(0,m)

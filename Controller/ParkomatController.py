@@ -33,8 +33,8 @@ class Controller():
         self.__view.BindButton50zl(self.dodajPieniadze)
         self.__view.BindButtonZatwierdz(self.zatwierdz)
         self.__view.BindButtonZmianaAktualnejGodziny(self.zmianaAktualnejGodziny)
-        self.__view.SetLiczbaWrzucanychPieniedzy("1")
-        self.__view.SetWrzucono(str(self.__przechowywaczPieniedzy.Suma())+" zł")
+        self.__view.LiczbaWrzucanychPieniedzy = "1"
+        self.__view.Wrzucono = str(self.__przechowywaczPieniedzy.Suma())+" zł"
         self.__view.ResetDataWyjazduZParkingu()
         self.setAktualnyCzas()
 
@@ -48,7 +48,7 @@ class Controller():
         """
         Funkcja do dodania wartości wybranej momnety do sumy
         """
-        liczbaWrzucanychPieniedzy = int(self.__view.GetLiczbaWrzucanychPieniedzy()) if self.__view.GetLiczbaWrzucanychPieniedzy().isdigit() else None
+        liczbaWrzucanychPieniedzy = int(self.__view.LiczbaWrzucanychPieniedzy) if self.__view.LiczbaWrzucanychPieniedzy.isdigit() else None
         if liczbaWrzucanychPieniedzy is None or liczbaWrzucanychPieniedzy < 1:
             messagebox.showerror("Błąd", "Liczba wrzucanych pieniędzy musi być liczbą dodatnią.")
         else:
@@ -57,18 +57,18 @@ class Controller():
                 if result != None:
                     messagebox.showerror("Błąd", result)
                     break
-            self.__view.SetWrzucono(str(self.__przechowywaczPieniedzy.Suma())+" zł")
+            self.__view.Wrzucono = str(self.__przechowywaczPieniedzy.Suma())+" zł"
             self.aktualizacjaCzasu()
-        self.__view.SetLiczbaWrzucanychPieniedzy("1")
+        self.__view.LiczbaWrzucanychPieniedzy = "1"
 
     def setAktualnyCzas(self):
         """
         Funkcja odpowiadająca za aktualizacje czasu
         """
         if self.__zmianaAktualnejDaty != '':
-            self.__view.SetAktualnaData(self.__zmianaAktualnejDaty)
+            self.__view.AktualnaData = self.__zmianaAktualnejDaty
         else:
-            self.__view.SetAktualnaData(time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S"))
+            self.__view.AktualnaData = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime("%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S")
         
         self.aktualizacjaCzasu()
         self.__view.SetAktualnaDataTimerEvent(1000, self.setAktualnyCzas)
@@ -77,19 +77,19 @@ class Controller():
         """
         Funkcja weryfikująca, zatwierdzająca oraz resetująca dane
         """
-        if self.__view.GetNumerRejestracyjny() is None or self.__view.GetNumerRejestracyjny() == "":
+        if self.__view.NumerRejestracyjny is None or self.__view.NumerRejestracyjny == "":
                 messagebox.showerror("Błąd", "Nie wpisano numeru rejestracyjnego pojazdu.")
-        elif bool(re.match('^[A-Z0-9]*$', self.__view.GetNumerRejestracyjny())) == False:
+        elif bool(re.match('^[A-Z0-9]*$', self.__view.NumerRejestracyjny)) == False:
                 messagebox.showerror("Błąd", "Numer rejestracyjny może składać się tylko z wielkich liter od A do Z i cyfr.")
         elif self.__przechowywaczPieniedzy.Suma() == 0:
                 messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
         else:
             self.setAktualnyCzas()
-            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.GetNumerRejestracyjny() + ", czas zakupu: " + self.__view.GetAktualnaData().strftime('%d.%m.%Y %H:%M:%S') + ", termin wyjazdu: " + self.__view.GetDataWyjazduZParkingu())
+            messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.NumerRejestracyjny + ", czas zakupu: " + self.__view.AktualnaData.strftime('%d.%m.%Y %H:%M:%S') + ", termin wyjazdu: " + self.__view.DataWyjazduZParkingu)
             self.resetData()
-            self.__view.SetLiczbaWrzucanychPieniedzy("1")
-            self.__view.SetNumerRejestracyjny("")
-            self.__view.SetWrzucono(str(self.__przechowywaczPieniedzy.Suma())+" zł")
+            self.__view.LiczbaWrzucanychPieniedzy = "1"
+            self.__view.NumerRejestracyjny = ""
+            self.__view.Wrzucono = str(self.__przechowywaczPieniedzy.Suma())+" zł"
 
     def resetData(self):
         """
@@ -125,7 +125,7 @@ class Controller():
         Funkcja aktualizujaca czas wyjazdu
         """
         if  self.__przechowywaczPieniedzy.Suma() >= 1:
-            self.__view.SetDataWyjazduZParkingu(self.pobierzDateSekundy(self.__view.GetAktualnaData(), self.getSekundyDlaDodanychPieniedzy(self.__przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S')) #TODO do dokończenia obliczanie daty wyjazdu
+            self.__view.DataWyjazduZParkingu = (self.pobierzDateSekundy(self.__view.AktualnaData, self.getSekundyDlaDodanychPieniedzy(self.__przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S'))
         else:
             self.__view.ResetDataWyjazduZParkingu()
 
