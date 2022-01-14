@@ -30,14 +30,14 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_3(self):
-        self.__parkomatApp.setAktualnaData("20.01.2022 19:00:01")
+        self.__parkomatApp.setAktualnaData("20.01.2022 19:01")
         self.__parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         self.__parkomatApp.dodajPieniadze(5)
         self.__parkomatApp.zatwierdz("<Button>")
         self.__parkomatApp.resetData()
 
     def test_4(self):
-        self.__parkomatApp.setAktualnaData("21.01.2022 19:00:01")
+        self.__parkomatApp.setAktualnaData("21.01.2022 19:01")
         self.__parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         self.__parkomatApp.dodajPieniadze(5)
         self.__parkomatApp.zatwierdz("<Button>")
