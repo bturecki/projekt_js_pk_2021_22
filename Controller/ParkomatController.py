@@ -130,7 +130,11 @@ class Controller():
             if licznikDodanychSekund == liczbaSekund:
                 returnValue = dodanaData
                 break
-        return returnValue
+            
+        if returnValue == None:
+            raise BrakDatyWyjazduException("returnValue is None")
+        else:
+            return returnValue
 
     def getDataRozpoczecia(self, start, liczbaSekund) -> datetime:
         """

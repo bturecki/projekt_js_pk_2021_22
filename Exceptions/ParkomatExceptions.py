@@ -21,6 +21,16 @@ class NieznanaWalutaException(Exception):
     def __str__(self):
         return repr(self.value)
 
+class BrakDatyWyjazduException(Exception):
+    """
+    Wyjątek jeśli data wyjazdu nie zostanie poprawnie obliczona
+    """
+
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
 
 class PrzepelnionyBankomatException(Exception):
     """
