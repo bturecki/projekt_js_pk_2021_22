@@ -75,7 +75,7 @@ class Controller():
             self.__view.AktualnaData = self.__zmianaAktualnejDaty
         else:
             self.__view.AktualnaData = time.strftime("%d") + "." + time.strftime("%m") + "." + time.strftime(
-                "%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M") + ":" + time.strftime("%S")
+                "%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M")
 
         self.aktualizacjaCzasu()
         self.__view.SetAktualnaDataTimerEvent(1000, self.setAktualnyCzas)
@@ -95,7 +95,7 @@ class Controller():
         else:
             self.setAktualnyCzas()
             messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.NumerRejestracyjny + ", czas zakupu: " +
-                                self.__view.AktualnaData.strftime('%d.%m.%Y %H:%M:%S') + ", termin wyjazdu: " + self.__view.DataWyjazduZParkingu)
+                                self.__view.AktualnaData.strftime('%d.%m.%Y %H:%M') + ", termin wyjazdu: " + self.__view.DataWyjazduZParkingu)
             self.resetData()
             self.__view.LiczbaWrzucanychPieniedzy = "1"
             self.__view.NumerRejestracyjny = ""
@@ -109,28 +109,38 @@ class Controller():
         self.__przechowywaczPieniedzy.Reset()
         self.__zmianaAktualnejDaty = ''
 
-    def pobierzDateSekundy(self, start, liczbaSekund):
+    def pobierzDateSekundy(self, aktualnaData, liczbaSekund):
         """
         Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
         która jest aktualnie opłacona jeśli chodzi o parkowanie
         """
-        _start = self.getDataWyjazdu(start, liczbaSekund)
-        if liczbaSekund == 0:
-            return _start
-        rr = rrule(SECONDLY, byweekday=(MO, TU, WE, TH, FR), byhour=(
-            8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19), dtstart=_start, interval=liczbaSekund)
-        t = rr.after(_start)
-        return t
+        start = self.getDataRozpoczecia(aktualnaData, liczbaSekund)
+        licznikDodanychSekund = 0
+        returnValue = None
+        while True:
+            dodanaData = start + datetime.timedelta(0, 1)
+            if dodanaData.weekday() == 5 or dodanaData.weekday() == 6:
+                start = dodanaData
+                continue
+            if dodanaData.hour > 19 or dodanaData.hour < 8:
+                start = dodanaData
+                continue
+            licznikDodanychSekund = licznikDodanychSekund + 1
+            start = dodanaData
+            if licznikDodanychSekund == liczbaSekund:
+                returnValue = dodanaData
+                break
+        return returnValue
 
-    def getDataWyjazdu(self, start, liczbaSekund) -> datetime:
+    def getDataRozpoczecia(self, start, liczbaSekund) -> datetime:
         """
-        Funkcja zwracająca datę wyjazdu z walidacją godzin i dni kiedy parkomat nie działa
+        Funkcja zwracająca datę początkową z walidacją godzin i dni kiedy parkomat nie działa
         """
         darmowe_godziny = [0, 1, 2, 3, 4, 5, 6, 7, 20, 21, 22, 23]
 
         if liczbaSekund > 0:
             if start.hour in darmowe_godziny:
-                
+
                 if start.weekday() == 4:
                     start = start + datetime.timedelta(days=3)
                 elif start.weekday() == 5:
@@ -161,7 +171,7 @@ class Controller():
         """
         if self.__przechowywaczPieniedzy.Suma() >= 1:
             self.__view.DataWyjazduZParkingu = (self.pobierzDateSekundy(self.__view.AktualnaData, self.getSekundyDlaDodanychPieniedzy(
-                self.__przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M:%S'))
+                self.__przechowywaczPieniedzy.Suma())).strftime('%d.%m.%Y %H:%M'))
         else:
             self.__view.ResetDataWyjazduZParkingu()
 

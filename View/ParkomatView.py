@@ -117,7 +117,7 @@ class View():
 
     @property
     def AktualnaData(self) -> datetime:
-        return datetime.strptime(self.__mainWindow.__labelAktualnaData.cget("text"), '%d.%m.%Y %H:%M:%S')
+        return datetime.strptime(self.__mainWindow.__labelAktualnaData.cget("text"), '%d.%m.%Y %H:%M')
 
     @AktualnaData.setter
     def AktualnaData(self, text):

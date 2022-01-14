@@ -21,7 +21,7 @@ class DateSelectorController():
                 "Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
         else:
             self.__parent.setAktualnaData((datetime.strptime(self.__view.Data.strftime(
-                '%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds=_sekundy)).strftime('%d.%m.%Y %H:%M:%S'))
+                '%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds=_sekundy)).strftime('%d.%m.%Y %H:%M'))
             self.__root.destroy()
 
     def __init__(self, parent):

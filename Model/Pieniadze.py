@@ -82,7 +82,7 @@ class PrzechowywaczPieniedzy:
         """
         Funkcja zwracająca sumę wrzuconych pieniędzy
         """
-        return sum([p.GetWartosc() for p in self.__lista])
+        return round(sum([p.GetWartosc() for p in self.__lista]),2)
 
     def LiczbaNominalu(self, nominal):
         """
