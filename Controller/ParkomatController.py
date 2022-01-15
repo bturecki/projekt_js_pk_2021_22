@@ -115,7 +115,7 @@ class Controller():
         która jest aktualnie opłacona jeśli chodzi o parkowanie
         """
         start = self.getDataRozpoczecia(aktualnaData, liczbaSekund)
-        licznikDodanychSekund = 0
+        licznikDodanychSekund = -1
         returnValue = None
         while True:
             dodanaData = start + datetime.timedelta(0, 1)
