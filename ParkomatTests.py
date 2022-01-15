@@ -26,34 +26,34 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.dodajPieniadze(2)
         self.__parkomatApp.dodajPieniadze(5)
         self.__parkomatApp.dodajPieniadze(5)
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.resetData()
 
     def test_3(self):
         self.__parkomatApp.setAktualnaData("20.01.2022 19:01")
         self.__parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         self.__parkomatApp.dodajPieniadze(5)
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.resetData()
 
     def test_4(self):
         self.__parkomatApp.setAktualnaData("21.01.2022 19:01")
         self.__parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         self.__parkomatApp.dodajPieniadze(5)
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.resetData()
 
     def test_5(self):
         self.__parkomatApp.GetView().NumerRejestracyjny = "KRA123"
         self.__parkomatApp.dodajPieniadze(1)
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.resetData()
 
     def test_6(self):
         self.__parkomatApp.GetView().NumerRejestracyjny = "KRA321"
         self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = "200"
         self.__parkomatApp.dodajPieniadze(0.01)
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.resetData()
 
     def test_7(self):
@@ -63,14 +63,14 @@ class TestsParkomat(unittest.TestCase):
 
     def test_8(self):
         self.__parkomatApp.GetView().NumerRejestracyjny = "KRA123"
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.resetData()
 
     def test_9(self):
         self.__parkomatApp.dodajPieniadze(10)
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.GetView().NumerRejestracyjny = "asdasfsad"
-        self.__parkomatApp.zatwierdz("<Button>")
+        self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.__parkomatApp.resetData()
 
 

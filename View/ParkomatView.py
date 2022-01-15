@@ -156,55 +156,55 @@ class View():
             text="---------------------")
 
     def BindButtonZatwierdz(self, f):
-        self.__mainWindow.__buttonZatwierdz.bind("<Button>", f)
+        self.__mainWindow.__buttonZatwierdz.bind("<ButtonRelease>", f)
 
     def BindButtonZmianaAktualnejGodziny(self, f):
-        self.__mainWindow.__buttonZmianaAktualnejGodziny.bind("<Button>", f)
+        self.__mainWindow.__buttonZmianaAktualnejGodziny.bind("<ButtonRelease>", f)
 
     def BindButton1gr(self, f):
         self.__mainWindow.__button1gr.bind(
-            "<Button>", lambda event, wartosc=0.01: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=0.01: f(wartosc))
 
     def BindButton2gr(self, f):
         self.__mainWindow.__button2gr.bind(
-            "<Button>", lambda event, wartosc=0.02: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=0.02: f(wartosc))
 
     def BindButton5gr(self, f):
         self.__mainWindow.__button5gr.bind(
-            "<Button>", lambda event, wartosc=0.05: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=0.05: f(wartosc))
 
     def BindButton10gr(self, f):
         self.__mainWindow.__button10gr.bind(
-            "<Button>", lambda event, wartosc=0.10: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=0.10: f(wartosc))
 
     def BindButton20gr(self, f):
         self.__mainWindow.__button20gr.bind(
-            "<Button>", lambda event, wartosc=0.20: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=0.20: f(wartosc))
 
     def BindButton50gr(self, f):
         self.__mainWindow.__button50gr.bind(
-            "<Button>", lambda event, wartosc=0.50: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=0.50: f(wartosc))
 
     def BindButton1zl(self, f):
         self.__mainWindow.__button1zl.bind(
-            "<Button>", lambda event, wartosc=1: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=1: f(wartosc))
 
     def BindButton2zl(self, f):
         self.__mainWindow.__button2zl.bind(
-            "<Button>", lambda event, wartosc=2: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=2: f(wartosc))
 
     def BindButton5zl(self, f):
         self.__mainWindow.__button5zl.bind(
-            "<Button>", lambda event, wartosc=5: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=5: f(wartosc))
 
     def BindButton10zl(self, f):
         self.__mainWindow.__button10zl.bind(
-            "<Button>", lambda event, wartosc=10: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=10: f(wartosc))
 
     def BindButton20zl(self, f):
         self.__mainWindow.__button20zl.bind(
-            "<Button>", lambda event, wartosc=20: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=20: f(wartosc))
 
     def BindButton50zl(self, f):
         self.__mainWindow.__button50zl.bind(
-            "<Button>", lambda event, wartosc=50: f(wartosc))
+            "<ButtonRelease>", lambda event, wartosc=50: f(wartosc))
