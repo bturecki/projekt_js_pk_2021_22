@@ -96,7 +96,7 @@ class Controller():
         else:
             self.setAktualnyCzas()
             messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.NumerRejestracyjny + ", czas zakupu: " +
-                                self.__view.AktualnaData.strftime('%d.%m.%Y %H:%M') + ", termin wyjazdu: " + self.__view.DataWyjazduZParkingu)
+                                self.__view.AktualnaData.strftime('%d.%m.%Y %H:%M') + ", termin wyjazdu: " + self.__view.DataWyjazduZParkingu + ", wrzucone pieniądze: " + str(self.__przechowywaczPieniedzy.Suma()) + " zł")
             self.resetData()
             self.__view.LiczbaWrzucanychPieniedzy = "1"
             self.__view.NumerRejestracyjny = ""
@@ -187,14 +187,20 @@ class Controller():
         dsc = DateSelectorController(self)
         dsc.run()
 
-    def GetView(self) -> DateSelectorView:
+    def GetView(self) -> View:
         """
-        Funkcja zwracająca instancje widoku. Tylko do testów jednostkowych.
+        Funkcja zwracająca instancje widoku. Tylko do testów jednostkowych, z racji, że pola tej klasy są prywatne.
         """
         return self.__view
 
+    def GetPrzechowywaczMonet(self) -> PrzechowywaczPieniedzy:
+        """
+        Funkcja zwracająca instancje PrzechowywaczaPieniedzy. Tylko do testów jednostkowych, z racji, że pola tej klasy są prywatne.
+        """
+        return self.__przechowywaczPieniedzy
+
     def setAktualnaData(self, data: datetime):
         """
-        Funkcja ustawiająca aktualną datę. Tylko do testów jednostkowych.
+        Funkcja ustawiająca aktualną datę. Tylko do testów jednostkowych, z racji, że pola tej klasy są prywatne.
         """
         self.__zmianaAktualnejDaty = data
