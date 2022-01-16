@@ -112,7 +112,7 @@ class TestsParkomat(unittest.TestCase):
         self.assertEqual(self.__parkomatApp.GetView().NumerRejestracyjny, "")
         # Zatwierdzam, komunikat - brak numeru rejestracyjnego
         self.__parkomatApp.zatwierdz("<ButtonRelease>")
-        self.__parkomatApp.GetView().NumerRejestracyjny = "test9nie_poprawny_numer"
+        self.__parkomatApp.GetView().NumerRejestracyjny = "test9_nie_poprawny_numer"
         # Zatwierdzam, komunikat - niepoprawnie wpisany numer rejestracyjny
         self.__parkomatApp.zatwierdz("<ButtonRelease>")
         self.assertEqual(self.__parkomatApp.GetView(
