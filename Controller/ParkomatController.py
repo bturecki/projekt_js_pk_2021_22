@@ -40,6 +40,7 @@ class Controller():
         self.__view.Wrzucono = str(self.__przechowywaczPieniedzy.Suma())+" zł"
         self.__view.ResetDataWyjazduZParkingu()
         self.setAktualnyCzas()
+        self.__ostatniaLiczbaSekund = 0
 
     def run(self):
         """
@@ -79,7 +80,7 @@ class Controller():
                 "%Y") + " " + time.strftime("%H") + ":" + time.strftime("%M")
 
         self.aktualizacjaCzasu()
-        self.__view.SetAktualnaDataTimerEvent(1000, self.setAktualnyCzas)
+        self.__view.SetAktualnaDataTimerEvent(60000, self.setAktualnyCzas)
 
     def zatwierdz(self, event):
         """
@@ -109,14 +110,22 @@ class Controller():
         """
         self.__przechowywaczPieniedzy.Reset()
         self.__zmianaAktualnejDaty = ''
-
+        self.__ostatniaLiczbaSekund = 0
+        self.setAktualnyCzas()
+        
     def pobierzDateSekundy(self, aktualnaData: datetime, liczbaSekund: int) -> datetime:
         """
         Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
         która jest aktualnie opłacona jeśli chodzi o parkowanie
         """
-        start = self.getDataRozpoczecia(aktualnaData, liczbaSekund)
-        licznikDodanychSekund = -1
+        dodawanaLiczbaSekund = liczbaSekund - self.__ostatniaLiczbaSekund #dodaje tylko nowododane sekundy od ostatniego przeliczania
+        aktualnaDataNowa = None
+        if self.__ostatniaLiczbaSekund == 0: #stan początkowy
+            aktualnaDataNowa = aktualnaData
+        else:
+            aktualnaDataNowa = datetime.strptime(self.__view.DataWyjazduZParkingu, '%d.%m.%Y %H:%M') #pobranie daty wyjazdu jako nowej daty wjazdu, żeby dodać tylko nowododane sekundy
+        start = self.getDataRozpoczecia(aktualnaDataNowa, dodawanaLiczbaSekund)
+        licznikDodanychSekund = 0
         returnValue = None
         while True:
             dodanaData = start + datetime.timedelta(0, 1)
@@ -128,7 +137,7 @@ class Controller():
                 continue
             licznikDodanychSekund = licznikDodanychSekund + 1
             start = dodanaData
-            if licznikDodanychSekund == liczbaSekund:
+            if licznikDodanychSekund == dodawanaLiczbaSekund + 1:
                 returnValue = dodanaData
                 break
 
