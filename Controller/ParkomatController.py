@@ -2,7 +2,6 @@ import datetime
 import tkinter as tk
 from tkinter import messagebox
 import time
-from dateutil.rrule import *
 import re
 import math
 from Controller.DateSelectionController import DateSelectorController
