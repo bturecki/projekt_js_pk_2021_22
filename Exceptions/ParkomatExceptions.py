@@ -45,6 +45,7 @@ class PrzepelnionyBankomatException(Exception):
     def __str__(self):
         return self.value
 
+
 class NiepoprawnieUstawionaDataException(Exception):
     """
     Wyjątek jeśli użytkownik wprowadzi niepoprawnie datę lub godzinę podczas zmiany aktualnej daty.
@@ -55,6 +56,7 @@ class NiepoprawnieUstawionaDataException(Exception):
 
     def __str__(self):
         return self.value
+
 
 class BrakNumeruRejestracyjnegoException(Exception):
     """
@@ -67,6 +69,7 @@ class BrakNumeruRejestracyjnegoException(Exception):
     def __str__(self):
         return self.value
 
+
 class NiepoprawnieUstawionyNumerRejestracyjnyException(Exception):
     """
     Wyjątek jeśli użytkownik wprowadzi niepoprawnie ustawiony numer rejestracyjny.
@@ -77,6 +80,7 @@ class NiepoprawnieUstawionyNumerRejestracyjnyException(Exception):
 
     def __str__(self):
         return self.value
+
 
 class BrakPieniedzyException(Exception):
     """

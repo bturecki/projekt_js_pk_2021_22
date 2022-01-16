@@ -30,7 +30,8 @@ class DateSelectorController():
         _sekundy = int(
             self.__view.Sekunda) if self.__view.Sekunda.isdigit() else None
         if(_godziny is None or _godziny < 0 or _godziny > 23 or _minuty is None or _minuty < 0 or _minuty > 60 or _sekundy is None or _sekundy < 0 or _sekundy > 60):
-            raise NiepoprawnieUstawionaDataException("Ustawiona data jest niepoprawna. Spróbuj ponownie.")
+            raise NiepoprawnieUstawionaDataException(
+                "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
         else:
             self.__parent.setAktualnaData((datetime.strptime(self.__view.Data.strftime(
                 '%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds=_sekundy)).strftime('%d.%m.%Y %H:%M'))
