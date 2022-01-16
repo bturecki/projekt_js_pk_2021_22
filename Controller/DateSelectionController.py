@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 from datetime import datetime, timedelta
+from Exceptions.ParkomatExceptions import NiepoprawnieUstawionaDataException
 from View.DateSelectionView import DateSelectorView
 
 
@@ -8,6 +9,15 @@ class DateSelectorController():
     """
     Klasa obsługująca logikę zmiany daty z poziomu GUI
     """
+
+    def ButtonOkClick(self):
+        """
+        Funkcja odpowiadająca na naciśnięcie przycisku zatwierdzającego wybór godziny
+        """
+        try:
+            self.zmianaAktualnejGodzinyClose()
+        except Exception as err:
+            messagebox.showerror("Błąd", err)
 
     def zmianaAktualnejGodzinyClose(self):
         """
@@ -20,8 +30,7 @@ class DateSelectorController():
         _sekundy = int(
             self.__view.Sekunda) if self.__view.Sekunda.isdigit() else None
         if(_godziny is None or _godziny < 0 or _godziny > 23 or _minuty is None or _minuty < 0 or _minuty > 60 or _sekundy is None or _sekundy < 0 or _sekundy > 60):
-            messagebox.showerror(
-                "Błąd", "Ustawiona data jest niepoprawna. Spróbuj ponownie.")
+            raise NiepoprawnieUstawionaDataException("Ustawiona data jest niepoprawna. Spróbuj ponownie.")
         else:
             self.__parent.setAktualnaData((datetime.strptime(self.__view.Data.strftime(
                 '%d.%m.%Y'), '%d.%m.%Y') + timedelta(hours=_godziny, minutes=_minuty, seconds=_sekundy)).strftime('%d.%m.%Y %H:%M'))
@@ -31,7 +40,7 @@ class DateSelectorController():
         self.__root = tk.Toplevel()
         self.__parent = parent
         self.__view = DateSelectorView(self.__root)
-        self.__view.BindButtonOk(self.zmianaAktualnejGodzinyClose)
+        self.__view.BindButtonOk(self.ButtonOkClick)
 
     def run(self):
         """

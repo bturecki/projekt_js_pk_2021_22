@@ -4,7 +4,7 @@ import unittest
 from Controller import ParkomatController
 from Controller.DateSelectionController import DateSelectorController
 from Controller.ParkomatController import Controller
-from Exceptions.ParkomatExceptions import ZlyNominalExcepion
+from Exceptions.ParkomatExceptions import *
 
 
 class TestsParkomat(unittest.TestCase):
@@ -21,19 +21,14 @@ class TestsParkomat(unittest.TestCase):
         """
         self.__parkomatApp.resetData()
         t = DateSelectorController(self.__parkomatApp)
-        # Ustawiam niepoprawną godzinę, pojawia się komunikat o błędzie
-        t.GetView().Godzina = 25
-        t.zmianaAktualnejGodzinyClose()
+        t.GetView().Godzina = 25 #Ustawiam niepoprawną godzinę
+        self.assertRaises(NiepoprawnieUstawionaDataException, t.zmianaAktualnejGodzinyClose) #Powinien być błąd
         t.GetView().Godzina = 12  # Ustawiam poprawną godzinę
-        t.GetView().Minuta = 34
+        t.GetView().Minuta = 34 # Ustawiam poprawną minutę
         t.zmianaAktualnejGodzinyClose()
-        self.__parkomatApp.GetView().NumerRejestracyjny = "TEST1"
-        # Dodaje pieniądze żeby pojawił się komunikat
-        self.__parkomatApp.dodajPieniadze(2)
-        self.assertNotIn(
-            "-", self.__parkomatApp.GetView().DataWyjazduZParkingu)
-        # Zatwierdzam i pokazuje komunikat o aktualnej dacie
-        self.__parkomatApp.zatwierdz("<ButtonRelease>")
+        self.__parkomatApp.setAktualnyCzas()
+        self.assertEqual(self.__parkomatApp.GetView().AktualnaData.hour, 12) #Brak błędu - wszystko jest ok
+        self.assertEqual(self.__parkomatApp.GetView().AktualnaData.minute, 34) #Brak błędu - wszystko jest ok
         self.__parkomatApp.resetData()
 
     def test_2(self):
