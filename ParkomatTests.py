@@ -95,7 +95,7 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.setAktualnaData("21.01.2022 09:00") #ustawiam datę, na przykład 21.01.2022 godzina 9:00
         self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = 200
         self.__parkomatApp.dodajPieniadze(0.01)
-        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "21.01.2022 10:00") #data wyjazdu pół godziny po aktualnym czasie
+        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "21.01.2022 10:00") #data wyjazdu godzina po aktualnym czasie
         self.__parkomatApp.resetData()
 
     def test_7(self):
@@ -103,10 +103,9 @@ class TestsParkomat(unittest.TestCase):
         7. Wrzucić 201 monet 1gr, oczekiwana informacja o przepełnieniu parkomatu.
         """
         self.__parkomatApp.resetData()
-        self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = "201"
-        # Zatwierdzam, komunikat - przepełnienie parkomatu
-        self.__parkomatApp.dodajPieniadze(0.01)
-        self.assertEqual(self.__parkomatApp.GetPrzechowywaczMonet().Suma(), 2)
+        self.__parkomatApp.setAktualnaData("21.01.2022 09:00") #ustawiam datę, na przykład 21.01.2022 godzina 9:00
+        self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = 201
+        self.assertRaises(PrzepelnionyBankomatException, self.__parkomatApp.dodajPieniadze, 0.01) #Powinien być błąd o przepełnieniu bankomatu
         self.__parkomatApp.resetData()
 
     def test_8(self):

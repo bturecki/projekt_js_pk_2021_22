@@ -1,4 +1,5 @@
 import datetime
+from multiprocessing.sharedctypes import Value
 import tkinter as tk
 from tkinter import messagebox
 import time
@@ -20,18 +21,18 @@ class Controller():
         self.__przechowywaczPieniedzy = PrzechowywaczPieniedzy()
         self.__zmianaAktualnejDaty = ''
         self.__view = View(self.__root)
-        self.__view.BindButton1gr(self.dodajPieniadze)
-        self.__view.BindButton2gr(self.dodajPieniadze)
-        self.__view.BindButton5gr(self.dodajPieniadze)
-        self.__view.BindButton10gr(self.dodajPieniadze)
-        self.__view.BindButton20gr(self.dodajPieniadze)
-        self.__view.BindButton50gr(self.dodajPieniadze)
-        self.__view.BindButton1zl(self.dodajPieniadze)
-        self.__view.BindButton2zl(self.dodajPieniadze)
-        self.__view.BindButton5zl(self.dodajPieniadze)
-        self.__view.BindButton10zl(self.dodajPieniadze)
-        self.__view.BindButton20zl(self.dodajPieniadze)
-        self.__view.BindButton50zl(self.dodajPieniadze)
+        self.__view.BindButton1gr(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton2gr(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton5gr(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton10gr(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton20gr(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton50gr(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton1zl(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton2zl(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton5zl(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton10zl(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton20zl(self.ButtonDodawaniaPieniedzyClick)
+        self.__view.BindButton50zl(self.ButtonDodawaniaPieniedzyClick)
         self.__view.BindButtonZatwierdz(self.zatwierdz)
         self.__view.BindButtonZmianaAktualnejGodziny(
             self.zmianaAktualnejGodziny)
@@ -47,15 +48,24 @@ class Controller():
         """
         self.__root.mainloop()
 
+    def ButtonDodawaniaPieniedzyClick(self, wartosc: float, waluta: str = 'PLN'):
+        """
+        Funkcja odpowiadająca na naciśnięcie przycisku dodającego pieniądze
+        """
+        try:
+            self.dodajPieniadze(wartosc, waluta)
+        except Exception as err:
+            messagebox.showerror("Błąd", err)
+
     def dodajPieniadze(self, wartosc: float, waluta: str = 'PLN'):
         """
-        Funkcja do dodania wartości wybranej momnety do sumy
+        Funkcja do dodania wartości wybranego pieniądza do sumy
         """
         liczbaWrzucanychPieniedzy = int(
             self.__view.LiczbaWrzucanychPieniedzy) if self.__view.LiczbaWrzucanychPieniedzy.isdigit() else None
         if liczbaWrzucanychPieniedzy is None or liczbaWrzucanychPieniedzy < 1:
-            messagebox.showerror(
-                "Błąd", "Liczba wrzucanych pieniędzy musi być liczbą dodatnią.")
+            raise ValueError(
+                "Liczba wrzucanych pieniędzy musi być liczbą dodatnią.")
         else:
             for x in range(liczbaWrzucanychPieniedzy):
                 result = self.__przechowywaczPieniedzy.DodajPieniadze(
@@ -111,18 +121,21 @@ class Controller():
         self.__zmianaAktualnejDaty = ''
         self.__ostatniaLiczbaSekund = 0
         self.setAktualnyCzas()
-        
+
     def pobierzDateSekundy(self, aktualnaData: datetime, liczbaSekund: int) -> datetime:
         """
         Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
         która jest aktualnie opłacona jeśli chodzi o parkowanie
         """
-        dodawanaLiczbaSekund = liczbaSekund - self.__ostatniaLiczbaSekund #dodaje tylko nowododane sekundy od ostatniego przeliczania
+        dodawanaLiczbaSekund = liczbaSekund - \
+            self.__ostatniaLiczbaSekund  # dodaje tylko nowododane sekundy od ostatniego przeliczania
         aktualnaDataNowa = None
-        if self.__ostatniaLiczbaSekund == 0: #stan początkowy
+        if self.__ostatniaLiczbaSekund == 0:  # stan początkowy
             aktualnaDataNowa = aktualnaData
         else:
-            aktualnaDataNowa = datetime.strptime(self.__view.DataWyjazduZParkingu, '%d.%m.%Y %H:%M') #pobranie daty wyjazdu jako nowej daty wjazdu, żeby dodać tylko nowododane sekundy
+            # pobranie daty wyjazdu jako nowej daty wjazdu, żeby dodać tylko nowododane sekundy
+            aktualnaDataNowa = datetime.strptime(
+                self.__view.DataWyjazduZParkingu, '%d.%m.%Y %H:%M')
         start = self.getDataRozpoczecia(aktualnaDataNowa, dodawanaLiczbaSekund)
         licznikDodanychSekund = 0
         returnValue = None
