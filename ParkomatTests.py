@@ -16,6 +16,9 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_1(self):
+        """
+        1. Ustaw niepoprawną godzinę. Oczekiwany komunikat o błędzie. Ustawić godzinę na 12:34.
+        """
         self.__parkomatApp.resetData()
         t = DateSelectorController(self.__parkomatApp)
         # Ustawiam niepoprawną godzinę, pojawia się komunikat o błędzie
@@ -34,6 +37,12 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_2(self):
+        """
+        2. Wrzucić 2zł, oczekiwany termin wyjazdu godzinę po aktualnym czasie.
+        Dorzuć 4zł, oczekiwany termin wyjazdu dwie godziny po aktualnym czasie.
+        Dorzuć 5zł, oczekiwany termin wyjazdu trzy godziny po aktualnym czasie. 
+        Dorzuć kolejne 5zł, oczekiwany termin wyjazdu cztery godziny po aktualnym czasie.
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.dodajPieniadze(2)
         self.__parkomatApp.dodajPieniadze(2)
@@ -49,6 +58,10 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_3(self):
+        """
+        3. Wrzucić tyle pieniędzy, aby termin wyjazdu przeszedł na kolejny dzień,
+        zgodnie z zasadami -- wrzucić tyle monet aby termin wyjazdu był po godzinie 19:00,dorzucić monetę 5zł.
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.setAktualnaData("20.01.2022 19:01")
         self.__parkomatApp.GetView().NumerRejestracyjny = "TEST3"
@@ -60,6 +73,10 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_4(self):
+        """
+        4. Wrzucić tyle pieniędzy, aby termin wyjazdu przeszedł na kolejny tydzień,
+        zgodnie z zasadami - wrzucić tyle monet aby termin wyjazdu był w piątek po godzinie 19:00, a potem dorzucić monetę 5zł.
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.setAktualnaData("21.01.2022 19:01")
         self.__parkomatApp.GetView().NumerRejestracyjny = "TEST4"
@@ -71,6 +88,9 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_5(self):
+        """
+        5. Wrzucić 1zł, oczekiwany termin wyjazdu pól godziny po aktualnym czasie.
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.GetView().NumerRejestracyjny = "TEST5"
         self.__parkomatApp.dodajPieniadze(1)
@@ -81,6 +101,9 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_6(self):
+        """
+        6. Wrzucić 200 monet 1gr, oczekiwany termin wyjazdu godzinę po aktualnym czasie.
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.GetView().NumerRejestracyjny = "TEST6"
         self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = "200"
@@ -91,6 +114,9 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_7(self):
+        """
+        7. Wrzucić 201 monet 1gr, oczekiwana informacja o przepełnieniu parkomatu.
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = "201"
         # Zatwierdzam, komunikat - przepełnienie parkomatu
@@ -99,6 +125,9 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_8(self):
+        """
+        8. Wciśnięcie "Zatwierdź" bez wrzucenia monet -- oczekiwana informacja o błędzie.
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.GetView().NumerRejestracyjny = "TEST8"
         self.assertIn("-", self.__parkomatApp.GetView().DataWyjazduZParkingu)
@@ -107,6 +136,10 @@ class TestsParkomat(unittest.TestCase):
         self.__parkomatApp.resetData()
 
     def test_9(self):
+        """
+        9. Wciśnięcie "Zatwierdź" bez wpisania numeru rejestracyjnego -- oczekiwana informacja o błędzie. 
+        Wciśnięcie "Zatwierdź" po wpisaniu niepoprawnego numeru rejestracyjnego -- oczekiwana informacja o błędzie. 
+        """
         self.__parkomatApp.resetData()
         self.__parkomatApp.dodajPieniadze(10)
         self.assertEqual(self.__parkomatApp.GetView().NumerRejestracyjny, "")
