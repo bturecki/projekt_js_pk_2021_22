@@ -212,3 +212,4 @@ class Controller():
         Funkcja ustawiająca aktualną datę. Tylko do testów jednostkowych, z racji, że pola tej klasy są prywatne.
         """
         self.__zmianaAktualnejDaty = data
+        self.setAktualnyCzas()
