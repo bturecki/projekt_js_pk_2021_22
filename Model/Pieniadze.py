@@ -6,7 +6,7 @@ class Pieniadz:
     Bazowa klasa dla różnych rodzajów pieniędzy
     """
 
-    def __init__(self, wartosc, waluta):
+    def __init__(self, wartosc: float, waluta: str):
         if isinstance(wartosc, float) == False and isinstance(wartosc, int) == False:
             raise ValueError("Wartosc musi byc typu liczbowego.")
         if isinstance(waluta, str) == False:
@@ -26,7 +26,7 @@ class Moneta(Pieniadz):
     Rozszerzenie klasy Pieniadz. Obsługuje tylko monety.
     """
 
-    def __init__(self, wartosc, waluta):
+    def __init__(self, wartosc: float, waluta: str):
         if wartosc not in [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5]:
             raise ZlyNominalExcepion(wartosc)
         elif waluta.upper() != 'PLN':
@@ -40,7 +40,7 @@ class Banknot(Pieniadz):
     Rozszerzenie klasy Pieniadz. Obsługuje tylko banknoty.
     """
 
-    def __init__(self, wartosc, waluta):
+    def __init__(self, wartosc: float, waluta: str):
         if wartosc not in [10, 20, 50, 100, 500]:
             raise ZlyNominalExcepion(wartosc)
         elif waluta.upper() != 'PLN':
@@ -56,7 +56,7 @@ class PrzechowywaczPieniedzy:
     __waluta = 'PLN'
     __lista = []
 
-    def DodajPieniadze(self, pieniadz):
+    def DodajPieniadze(self, pieniadz: Pieniadz):
         """
         Dodaje obiekt typu Pieniadz do sumy pieniędzy
         """
@@ -78,19 +78,19 @@ class PrzechowywaczPieniedzy:
         except:  # Reszta błędów powinna być wyrzucana jako błąd programu.
             raise
 
-    def Suma(self):
+    def Suma(self) -> float:
         """
         Funkcja zwracająca sumę wrzuconych pieniędzy
         """
-        return round(sum([p.GetWartosc() for p in self.__lista]),2)
+        return round(sum([p.GetWartosc() for p in self.__lista]), 2)
 
-    def LiczbaNominalu(self, nominal):
+    def LiczbaNominalu(self, nominal: float) -> int:
         """
         Funkcja zwracająca liczbę monet danego rodzaju
         """
         return len([p.GetWartosc() for p in self.__lista if p.GetWartosc() == nominal])
 
-    def LiczbaWaluty(self, waluta):
+    def LiczbaWaluty(self, waluta: str) -> int:
         """
         Funkcja zwracająca liczbę pieniędzy danej waluty
         """

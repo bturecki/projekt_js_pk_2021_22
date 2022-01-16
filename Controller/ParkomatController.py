@@ -7,6 +7,7 @@ import re
 import math
 from Controller.DateSelectionController import DateSelectorController
 from Model.Pieniadze import *
+from View.DateSelectionView import DateSelectorView
 from View.ParkomatView import View
 
 
@@ -46,7 +47,7 @@ class Controller():
         """
         self.__root.mainloop()
 
-    def dodajPieniadze(self, wartosc, waluta='PLN'):
+    def dodajPieniadze(self, wartosc: float, waluta: str = 'PLN'):
         """
         Funkcja do dodania wartości wybranej momnety do sumy
         """
@@ -109,7 +110,7 @@ class Controller():
         self.__przechowywaczPieniedzy.Reset()
         self.__zmianaAktualnejDaty = ''
 
-    def pobierzDateSekundy(self, aktualnaData, liczbaSekund):
+    def pobierzDateSekundy(self, aktualnaData: datetime, liczbaSekund: int) -> datetime:
         """
         Funkcja zwracająca datę wyjazdu na podstawie aktualnej daty oraz liczby sekund,
         która jest aktualnie opłacona jeśli chodzi o parkowanie
@@ -130,13 +131,13 @@ class Controller():
             if licznikDodanychSekund == liczbaSekund:
                 returnValue = dodanaData
                 break
-            
+
         if returnValue == None:
             raise BrakDatyWyjazduException("returnValue is None")
         else:
             return returnValue
 
-    def getDataRozpoczecia(self, start, liczbaSekund) -> datetime:
+    def getDataRozpoczecia(self, start: datetime, liczbaSekund: int) -> datetime:
         """
         Funkcja zwracająca datę początkową z walidacją godzin i dni kiedy parkomat nie działa
         """
@@ -186,13 +187,13 @@ class Controller():
         dsc = DateSelectorController(self)
         dsc.run()
 
-    def GetView(self):
+    def GetView(self) -> DateSelectorView:
         """
         Funkcja zwracająca instancje widoku. Tylko do testów jednostkowych.
         """
         return self.__view
 
-    def setAktualnaData(self, data):
+    def setAktualnaData(self, data: datetime):
         """
         Funkcja ustawiająca aktualną datę. Tylko do testów jednostkowych.
         """

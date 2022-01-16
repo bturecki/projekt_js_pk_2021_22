@@ -10,6 +10,9 @@ class DateSelectorController():
     """
 
     def zmianaAktualnejGodzinyClose(self):
+        """
+        Funkcja zamykająca okno oraz ustawiająca wartość aktualnej daty w parencie
+        """
         _godziny = int(
             self.__view.Godzina) if self.__view.Godzina.isdigit() else None
         _minuty = int(
@@ -36,7 +39,7 @@ class DateSelectorController():
         """
         self.__root.wait_window(self.__root)
 
-    def GetView(self):
+    def GetView(self) -> DateSelectorView:
         """
         Funkcja zwracająca instancje widoku. Tylko do testów jednostkowych.
         """

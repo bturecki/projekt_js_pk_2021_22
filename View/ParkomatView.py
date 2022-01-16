@@ -107,11 +107,11 @@ class View():
             row=15, column=0, columnspan=2)
 
     @property
-    def NumerRejestracyjny(self):
+    def NumerRejestracyjny(self) -> str:
         return self.__mainWindow.__entryNumerRejestracyjny.get()
 
     @NumerRejestracyjny.setter
-    def NumerRejestracyjny(self, text):
+    def NumerRejestracyjny(self, text: str):
         self.__mainWindow.__entryNumerRejestracyjny.delete(0, tk.END)
         self.__mainWindow.__entryNumerRejestracyjny.insert(0, text)
 
@@ -120,35 +120,35 @@ class View():
         return datetime.strptime(self.__mainWindow.__labelAktualnaData.cget("text"), '%d.%m.%Y %H:%M')
 
     @AktualnaData.setter
-    def AktualnaData(self, text):
+    def AktualnaData(self, text: str):
         self.__mainWindow.__labelAktualnaData.config(text=text)
 
-    def SetAktualnaDataTimerEvent(self, time, event):
+    def SetAktualnaDataTimerEvent(self, time: int, event):
         self.__mainWindow.__labelAktualnaData.after(time, event)
 
     @property
-    def LiczbaWrzucanychPieniedzy(self):
+    def LiczbaWrzucanychPieniedzy(self) -> str:
         return self.__mainWindow.__entryLiczbaWrzucanychPieniedzy.get()
 
     @LiczbaWrzucanychPieniedzy.setter
-    def LiczbaWrzucanychPieniedzy(self, text):
+    def LiczbaWrzucanychPieniedzy(self, text: str):
         self.__mainWindow.__entryLiczbaWrzucanychPieniedzy.delete(0, tk.END)
         self.__mainWindow.__entryLiczbaWrzucanychPieniedzy.insert(0, text)
 
     @property
-    def Wrzucono(self):
+    def Wrzucono(self) -> str:
         return self.__mainWindow.__labelWrzucono.cget("text"),
 
     @Wrzucono.setter
-    def Wrzucono(self, text):
+    def Wrzucono(self, text: str):
         self.__mainWindow.__labelWrzucono.config(text=text)
 
     @property
-    def DataWyjazduZParkingu(self):
+    def DataWyjazduZParkingu(self) -> str:
         return self.__mainWindow.__labelDataWyjazduZParkingu.cget("text")
 
     @DataWyjazduZParkingu.setter
-    def DataWyjazduZParkingu(self, text):
+    def DataWyjazduZParkingu(self, text: str):
         self.__mainWindow.__labelDataWyjazduZParkingu.config(text=text)
 
     def ResetDataWyjazduZParkingu(self):
@@ -159,7 +159,8 @@ class View():
         self.__mainWindow.__buttonZatwierdz.bind("<ButtonRelease>", f)
 
     def BindButtonZmianaAktualnejGodziny(self, f):
-        self.__mainWindow.__buttonZmianaAktualnejGodziny.bind("<ButtonRelease>", f)
+        self.__mainWindow.__buttonZmianaAktualnejGodziny.bind(
+            "<ButtonRelease>", f)
 
     def BindButton1gr(self, f):
         self.__mainWindow.__button1gr.bind(

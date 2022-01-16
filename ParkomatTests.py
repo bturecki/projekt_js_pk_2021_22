@@ -8,7 +8,7 @@ from Exceptions.ParkomatExceptions import ZlyNominalExcepion
 
 
 class TestsParkomat(unittest.TestCase):
-    
+
     __parkomatApp = Controller()
 
     def test_1(self):

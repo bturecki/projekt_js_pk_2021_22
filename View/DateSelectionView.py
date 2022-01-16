@@ -1,3 +1,4 @@
+import datetime
 import tkinter as tk
 from tkcalendar import DateEntry
 
@@ -34,35 +35,35 @@ class DateSelectorView():
         self.__window.__entrySekunda.insert(0, "00")
 
     def BindButtonOk(self, f):
-        self.__window.__buttonOk.bind("<Button>", lambda event: f())
+        self.__window.__buttonOk.bind("<ButtonRelease>", lambda event: f())
 
     @property
-    def Godzina(self):
+    def Godzina(self) -> str:
         return self.__window.__entryGodzina.get()
 
     @Godzina.setter
-    def Godzina(self, m):
+    def Godzina(self, m: str):
         self.__window.__entryGodzina.delete(0, tk.END)
         self.__window.__entryGodzina.insert(0, m)
 
     @property
-    def Minuta(self):
+    def Minuta(self) -> str:
         return self.__window.__entryMinuta.get()
 
     @Minuta.setter
-    def Minuta(self, m):
+    def Minuta(self, m: str):
         self.__window.__entryMinuta.delete(0, tk.END)
         self.__window.__entryMinuta.insert(0, m)
 
     @property
-    def Sekunda(self):
+    def Sekunda(self) -> str:
         return self.__window.__entrySekunda.get()
 
     @Sekunda.setter
-    def Sekunda(self, m):
+    def Sekunda(self, m: str):
         self.__window.__entrySekunda.delete(0, tk.END)
         self.__window.__entrySekunda.insert(0, m)
 
     @property
-    def Data(self):
+    def Data(self) -> datetime:
         return self.__window.__cal.get_date()
