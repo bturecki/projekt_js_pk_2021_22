@@ -1,3 +1,4 @@
+import datetime
 import tkinter
 from tkinter import messagebox
 import unittest
@@ -5,7 +6,10 @@ from Controller import ParkomatController
 from Controller.DateSelectionController import DateSelectorController
 from Controller.ParkomatController import Controller
 from Exceptions.ParkomatExceptions import *
-
+import time
+import re
+import math
+from datetime import datetime
 
 class TestsParkomat(unittest.TestCase):
 
@@ -39,17 +43,16 @@ class TestsParkomat(unittest.TestCase):
         Dorzuć kolejne 5zł, oczekiwany termin wyjazdu cztery godziny po aktualnym czasie.
         """
         self.__parkomatApp.resetData()
+        self.__parkomatApp.setAktualnaData(datetime.strptime("17.01.2022 08:00",'%d.%m.%Y %H:%M')) #ustawiam datę, na przykład 17.01.2022 godzina 8:00
+        self.__parkomatApp.dodajPieniadze(2) #dorzucam 2 zł
+        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "17.01.2022 09:00") #data wyjazdu godzine po aktualnej dacie
         self.__parkomatApp.dodajPieniadze(2)
-        self.__parkomatApp.dodajPieniadze(2)
-        self.__parkomatApp.dodajPieniadze(2)
+        self.__parkomatApp.dodajPieniadze(2) #dorzucam 4 zł
+        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "17.01.2022 10:00") #data wyjazdu dwie godziny po aktualnej dacie
         self.__parkomatApp.dodajPieniadze(5)
+        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "17.01.2022 11:00") #data wyjazdu trzy godziny po aktualnej dacie
         self.__parkomatApp.dodajPieniadze(5)
-        self.__parkomatApp.GetView().NumerRejestracyjny = "TEST2"
-        self.assertNotIn(
-            "-", self.__parkomatApp.GetView().DataWyjazduZParkingu)
-
-        # Zatwierdzam, komunikat - czas wyjazdu 4 godziny po aktualnej dacie
-        self.__parkomatApp.zatwierdz("<ButtonRelease>")
+        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "17.01.2022 12:00") #data wyjazdu cztery godziny po aktualnej dacie
         self.__parkomatApp.resetData()
 
     def test_3(self):
