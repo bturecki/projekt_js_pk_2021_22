@@ -223,12 +223,6 @@ class Controller():
         """
         return self.__view
 
-    def GetPrzechowywaczMonet(self) -> PrzechowywaczPieniedzy:
-        """
-        Funkcja zwracająca instancje PrzechowywaczaPieniedzy. Tylko do testów jednostkowych, z racji, że pola tej klasy są prywatne.
-        """
-        return self.__przechowywaczPieniedzy
-
     def setAktualnaData(self, data: datetime):
         """
         Funkcja ustawiająca aktualną datę. Tylko do testów jednostkowych, z racji, że pola tej klasy są prywatne.
