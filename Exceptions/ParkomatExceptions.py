@@ -55,3 +55,36 @@ class NiepoprawnieUstawionaDataException(Exception):
 
     def __str__(self):
         return self.value
+
+class BrakNumeruRejestracyjnegoException(Exception):
+    """
+    Wyjątek jeśli użytkownik nie wprowadzi numeru rejestracyjnego.
+    """
+
+    def __init__(self, value: str):
+        self.value = value
+
+    def __str__(self):
+        return self.value
+
+class NiepoprawnieUstawionyNumerRejestracyjnyException(Exception):
+    """
+    Wyjątek jeśli użytkownik wprowadzi niepoprawnie ustawiony numer rejestracyjny.
+    """
+
+    def __init__(self, value: str):
+        self.value = value
+
+    def __str__(self):
+        return self.value
+
+class BrakPieniedzyException(Exception):
+    """
+    Wyjątek jeśli użytkownik nie wprowadzi żadnych pieniędzy.
+    """
+
+    def __init__(self, value: str):
+        self.value = value
+
+    def __str__(self):
+        return self.value

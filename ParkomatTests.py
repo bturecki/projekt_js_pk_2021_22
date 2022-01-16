@@ -113,10 +113,8 @@ class TestsParkomat(unittest.TestCase):
         8. Wciśnięcie "Zatwierdź" bez wrzucenia monet -- oczekiwana informacja o błędzie.
         """
         self.__parkomatApp.resetData()
-        self.__parkomatApp.GetView().NumerRejestracyjny = "TEST8"
-        self.assertIn("-", self.__parkomatApp.GetView().DataWyjazduZParkingu)
-        # Zatwierdzam, komunikat - brak wrzuconych pieniędzy
-        self.__parkomatApp.zatwierdz("<ButtonRelease>")
+        self.__parkomatApp.GetView().NumerRejestracyjny = "TEST123"
+        self.assertRaises(BrakPieniedzyException, self.__parkomatApp.zatwierdz) #Powinien być błąd o braku włożonych pieniędzy
         self.__parkomatApp.resetData()
 
     def test_9(self):
@@ -125,15 +123,9 @@ class TestsParkomat(unittest.TestCase):
         Wciśnięcie "Zatwierdź" po wpisaniu niepoprawnego numeru rejestracyjnego -- oczekiwana informacja o błędzie. 
         """
         self.__parkomatApp.resetData()
-        self.__parkomatApp.dodajPieniadze(10)
-        self.assertEqual(self.__parkomatApp.GetView().NumerRejestracyjny, "")
-        # Zatwierdzam, komunikat - brak numeru rejestracyjnego
-        self.__parkomatApp.zatwierdz("<ButtonRelease>")
+        self.assertRaises(BrakNumeruRejestracyjnegoException, self.__parkomatApp.zatwierdz) #Powinien być błąd o braku numeru rejestracyjnego
         self.__parkomatApp.GetView().NumerRejestracyjny = "test9_nie_poprawny_numer"
-        # Zatwierdzam, komunikat - niepoprawnie wpisany numer rejestracyjny
-        self.__parkomatApp.zatwierdz("<ButtonRelease>")
-        self.assertEqual(self.__parkomatApp.GetView(
-        ).NumerRejestracyjny, "test9_nie_poprawny_numer")
+        self.assertRaises(NiepoprawnieUstawionyNumerRejestracyjnyException, self.__parkomatApp.zatwierdz) #Powinien być błąd o błędnie wpisanym numerze rejestracyjnym
         self.__parkomatApp.resetData()
 
 

@@ -33,7 +33,7 @@ class Controller():
         self.__view.BindButton10zl(self.ButtonDodawaniaPieniedzyClick)
         self.__view.BindButton20zl(self.ButtonDodawaniaPieniedzyClick)
         self.__view.BindButton50zl(self.ButtonDodawaniaPieniedzyClick)
-        self.__view.BindButtonZatwierdz(self.zatwierdz)
+        self.__view.BindButtonZatwierdz(self.ZatwierdzBtnClick)
         self.__view.BindButtonZmianaAktualnejGodziny(
             self.zmianaAktualnejGodziny)
         self.__view.LiczbaWrzucanychPieniedzy = "1"
@@ -91,18 +91,27 @@ class Controller():
         self.aktualizacjaCzasu()
         self.__view.SetAktualnaDataTimerEvent(60000, self.setAktualnyCzas)
 
-    def zatwierdz(self, event):
+    def ZatwierdzBtnClick(self, event):
+        """
+        Funkcja odpowiadająca na naciśnięcie przycisku zatwierdzającego dane
+        """
+        try:
+            self.zatwierdz()
+        except Exception as err:
+            messagebox.showerror("Błąd", err)
+
+    def zatwierdz(self):
         """
         Funkcja weryfikująca, zatwierdzająca oraz resetująca dane
         """
         if self.__view.NumerRejestracyjny is None or self.__view.NumerRejestracyjny == "":
-            messagebox.showerror(
-                "Błąd", "Nie wpisano numeru rejestracyjnego pojazdu.")
+            raise BrakNumeruRejestracyjnegoException(
+                "Nie wpisano numeru rejestracyjnego pojazdu.")
         elif bool(re.match('^[A-Z0-9]*$', self.__view.NumerRejestracyjny)) == False:
-            messagebox.showerror(
-                "Błąd", "Numer rejestracyjny może składać się tylko z wielkich liter od A do Z i cyfr.")
+            raise NiepoprawnieUstawionyNumerRejestracyjnyException(
+                "Numer rejestracyjny może składać się tylko z wielkich liter od A do Z i cyfr.")
         elif self.__przechowywaczPieniedzy.Suma() == 0:
-            messagebox.showerror("Błąd", "Nie wrzucono żadnych pieniędzy.")
+            raise BrakPieniedzyException("Nie wrzucono żadnych pieniędzy.")
         else:
             self.setAktualnyCzas()
             messagebox.showinfo("Info", "Parking opłacony. Numer rejestracyjny: " + self.__view.NumerRejestracyjny + ", czas zakupu: " +
