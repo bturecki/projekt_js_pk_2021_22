@@ -72,7 +72,7 @@ class TestsParkomat(unittest.TestCase):
         zgodnie z zasadami - wrzucić tyle monet aby termin wyjazdu był w piątek po godzinie 19:00, a potem dorzucić monetę 5zł.
         """
         self.__parkomatApp.resetData()
-        self.__parkomatApp.setAktualnaData("21.01.2022 19:01") #ustawiam datę, na przykład 19.01.2022 godzina 19:01
+        self.__parkomatApp.setAktualnaData("21.01.2022 19:01") #ustawiam datę, na przykład 21.01.2022 godzina 19:01
         self.__parkomatApp.dodajPieniadze(5)
         self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "24.01.2022 08:46") #data wyjazdu na następny tydzień
         self.__parkomatApp.resetData()
@@ -82,12 +82,9 @@ class TestsParkomat(unittest.TestCase):
         5. Wrzucić 1zł, oczekiwany termin wyjazdu pól godziny po aktualnym czasie.
         """
         self.__parkomatApp.resetData()
-        self.__parkomatApp.GetView().NumerRejestracyjny = "TEST5"
+        self.__parkomatApp.setAktualnaData("21.01.2022 09:00") #ustawiam datę, na przykład 21.01.2022 godzina 9:00
         self.__parkomatApp.dodajPieniadze(1)
-        self.assertNotIn(
-            "-", self.__parkomatApp.GetView().DataWyjazduZParkingu)
-        # Zatwierdzam, komunikat - czas wyjazdu pół godziny po aktualnym czasie
-        self.__parkomatApp.zatwierdz("<ButtonRelease>")
+        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "21.01.2022 09:30") #data wyjazdu pół godziny po aktualnym czasie
         self.__parkomatApp.resetData()
 
     def test_6(self):
@@ -95,12 +92,10 @@ class TestsParkomat(unittest.TestCase):
         6. Wrzucić 200 monet 1gr, oczekiwany termin wyjazdu godzinę po aktualnym czasie.
         """
         self.__parkomatApp.resetData()
-        self.__parkomatApp.GetView().NumerRejestracyjny = "TEST6"
-        self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = "200"
+        self.__parkomatApp.setAktualnaData("21.01.2022 09:00") #ustawiam datę, na przykład 21.01.2022 godzina 9:00
+        self.__parkomatApp.GetView().LiczbaWrzucanychPieniedzy = 200
         self.__parkomatApp.dodajPieniadze(0.01)
-        self.assertEqual(self.__parkomatApp.GetPrzechowywaczMonet().Suma(), 2)
-        # Zatwierdzam, komunikat - czas wyjazdu godzina po aktualnym czasie
-        self.__parkomatApp.zatwierdz("<ButtonRelease>")
+        self.assertEqual(self.__parkomatApp.GetView().DataWyjazduZParkingu, "21.01.2022 10:00") #data wyjazdu pół godziny po aktualnym czasie
         self.__parkomatApp.resetData()
 
     def test_7(self):
